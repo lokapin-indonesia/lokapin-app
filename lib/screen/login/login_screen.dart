@@ -138,28 +138,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 .text
                                                 .toString();
 
-                                            Map data = {
-                                              'email': email,
-                                              'password': password,
-                                              // 'fcm': await FirebaseMessaging
-                                              //     .instance
-                                              //     .getToken(),
-                                            };
-
-                                            String body = json.encode(data);
-
-                                            showLoading(
-                                                context, 'Processing...');
-
-                                            final response = await http.post(
-                                              Uri.parse(API_URL + "/login"),
-                                              body: body,
-                                              encoding:
-                                                  Encoding.getByName('utf-8'),
-                                            );
-
-                                            Navigator.pop(context); //pop dialog
-                                            _login(response);
+                                            print(email);
+                                            print(password);
                                           }
                                           // WAEditProfileScreen(isEditProfile: false).launch(context);
                                         }),
