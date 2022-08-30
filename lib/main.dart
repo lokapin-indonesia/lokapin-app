@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mosaik',
+      title: 'Lokapin',
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       home: const SplashScreen(),
