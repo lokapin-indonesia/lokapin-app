@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lokapin_app/constant.dart';
+import 'package:lokapin_app/screen/home/home_Screen.dart';
 import 'package:lokapin_app/screen/register/register_screen.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
@@ -141,6 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                             print(email);
                                             print(password);
+                                            const HomeScreen().launch(context);
                                           }
                                           // WAEditProfileScreen(isEditProfile: false).launch(context);
                                         }),
