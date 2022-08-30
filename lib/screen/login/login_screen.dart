@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lokapin_app/constant.dart';
+import 'package:lokapin_app/screen/blank.dart';
 import 'package:lokapin_app/screen/register/register_screen.dart';
+import 'package:lokapin_app/utils/backends/auth-api.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
 import 'package:lokapin_app/widgets/dialog.dart';
@@ -139,8 +141,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 .text
                                                 .toString();
 
-                                            print(email);
-                                            print(password);
+                                            try{
+                                              var resp = await AuthenticationAPI.loginRequest(email, password);
+                                              print("adf");
+                                              if(resp.status == 200){
+                                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>BlankScreen()));
+                                                print("uwu1");
+                                              }else{
+                                                showErrorAlertDialog(context, 'Error', resp.message, () => Navigator.pop(context));
+                                                print("ussw2");
+                                              }
+                                            }on Exception catch(e){
+                                              print(e);
+                                              showErrorAlertDialog(context, 'Fatal Error', e.toString(), () => Navigator.pop(context));
+                                            }
                                           }
                                           // WAEditProfileScreen(isEditProfile: false).launch(context);
                                         }),
