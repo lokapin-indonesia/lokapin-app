@@ -3,29 +3,32 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lokapin_app/constant.dart';
-import 'package:lokapin_app/screen/register/register_screen.dart';
+import 'package:lokapin_app/screen/login/login_screen.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
 import 'package:lokapin_app/widgets/dialog.dart';
 // import 'package:mosaic/utils/jwt_helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class LoginScreen extends StatefulWidget {
-  static String tag = '/loginScreen';
+class RegisterScreen extends StatefulWidget {
+  static String tag = '/RegisterScreen';
 
-  const LoginScreen({Key? key}) : super(key: key);
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-
+  var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  var confirmPasswordController = TextEditingController();
+  FocusNode nameFocusNode = FocusNode();
   FocusNode emailFocusNode = FocusNode();
   FocusNode passWordFocusNode = FocusNode();
+  FocusNode confirmPassWordFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -66,7 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: context.width(),
                           padding: const EdgeInsets.only(
                               left: 16, right: 16, bottom: 16),
-                          margin: const EdgeInsets.only(top: 55.0),
                           decoration: boxDecorationWithShadow(
                               borderRadius: BorderRadius.circular(30)),
                           child: Column(
@@ -86,16 +88,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                             fit: BoxFit.contain,
                                           ),
                                         )).center(),
-                                    Text("Log In",
+                                    Text("Sign up",
                                         style: boldTextStyle(
                                             size: 32, color: primaryColor)),
                                     Text("Enter your email to proceed",
                                         style: boldTextStyle(
                                             size: 16, weight: FontWeight.w300)),
                                     16.height,
+                                    Text("Your Name",
+                                        style: boldTextStyle(size: 14)),
+                                    AppTextField(
+                                      decoration: inputDecoration(
+                                        hint: 'Enter your name here',
+                                        prefixIcon:
+                                            Icons.person_outline_outlined,
+                                      ),
+                                      textFieldType: TextFieldType.NAME,
+                                      keyboardType: TextInputType.name,
+                                      controller: nameController,
+                                      focus: nameFocusNode,
+                                      nextFocus: emailFocusNode,
+                                    ),
+                                    16.height,
                                     Text("Email",
                                         style: boldTextStyle(size: 14)),
-                                    8.height,
                                     AppTextField(
                                       decoration: inputDecoration(
                                           hint: 'Enter your email here',
@@ -109,7 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     16.height,
                                     Text("Password",
                                         style: boldTextStyle(size: 14)),
-                                    8.height,
                                     AppTextField(
                                       decoration: inputDecoration(
                                           hint: 'Enter your password here',
@@ -121,10 +136,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                           TextInputType.visiblePassword,
                                       controller: passwordController,
                                       focus: passWordFocusNode,
+                                      nextFocus: confirmPassWordFocusNode,
+                                    ),
+                                    16.height,
+                                    Text("Confirm Password",
+                                        style: boldTextStyle(size: 14)),
+                                    AppTextField(
+                                      decoration: inputDecoration(
+                                          hint:
+                                              'Enter your confirm password here',
+                                          prefixIcon: Icons.lock_outline),
+                                      suffixIconColor: primaryColor,
+                                      textFieldType: TextFieldType.PASSWORD,
+                                      isPassword: true,
+                                      keyboardType:
+                                          TextInputType.visiblePassword,
+                                      controller: confirmPasswordController,
+                                      focus: confirmPassWordFocusNode,
                                     ),
                                     16.height,
                                     AppButton(
-                                        text: "LOG IN",
+                                        text: "SIGN UP",
                                         color: secondaryColor,
                                         shapeBorder: RoundedRectangleBorder(
                                             borderRadius:
@@ -135,12 +167,26 @@ class _LoginScreenState extends State<LoginScreen> {
                                               .validate()) {
                                             String email =
                                                 emailController.text.toString();
+                                            String name =
+                                                nameController.text.toString();
                                             String password = passwordController
                                                 .text
                                                 .toString();
+                                            String confirmPassword =
+                                                confirmPasswordController.text
+                                                    .toString();
 
+                                            print(name);
                                             print(email);
                                             print(password);
+                                            print(confirmPassword);
+                                            if (password != confirmPassword) {
+                                              showErrorAlertDialog(
+                                                  context,
+                                                  'Warning',
+                                                  'Password and Confirm Password not match!',
+                                                  () => Navigator.pop(context));
+                                            }
                                           }
                                           // WAEditProfileScreen(isEditProfile: false).launch(context);
                                         }),
@@ -152,16 +198,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text('Don\'t have an account yet?',
+                                        Text('Already have an acount?',
                                             style: primaryTextStyle(
                                                 color: Colors.grey)),
                                         4.width,
-                                        Text('Create One',
+                                        Text('Log in',
                                                 style: boldTextStyle(
                                                     color: Colors.grey))
                                             .onTap(() {
-                                          const RegisterScreen()
-                                              .launch(context);
+                                          const LoginScreen().launch(context);
                                         }),
                                       ],
                                     ).center(),
@@ -174,7 +219,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  16.height,
                 ],
               ),
             ),
@@ -184,19 +228,19 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _login(response) {
-    if (response.statusCode == 200) {
-      final responseBody = json.decode(response.body);
-      String jwt = responseBody['Token'];
-      // storage.write('token', jwt);
+  // void _login(response) {
+  //   if (response.statusCode == 200) {
+  //     final responseBody = json.decode(response.body);
+  //     String jwt = responseBody['Token'];
+  //     // storage.write('token', jwt);
 
-      // Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
-      // storage.write('parent_id', jwtPayload['parent_id']);
-      // storage.write('child_id', jwtPayload['child_id']);
-      // LandingScreen().launch(context);
-    } else {
-      showErrorAlertDialog(context, 'Invalid Credentials',
-          'Wrong email or password', () => Navigator.pop(context));
-    }
-  }
+  //     // Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
+  //     // storage.write('parent_id', jwtPayload['parent_id']);
+  //     // storage.write('child_id', jwtPayload['child_id']);
+  //     // LandingScreen().launch(context);
+  //   } else {
+  //     showErrorAlertDialog(context, 'Invalid Credentials',
+  //         'Wrong email or password', () => Navigator.pop(context));
+  //   }
+  // }
 }
