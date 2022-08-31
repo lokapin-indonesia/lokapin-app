@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lokapin_app/screen/profile/profile_Screen.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -78,11 +79,15 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 50.height,
+                25.height,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.person))
+                    IconButton(
+                        onPressed: () {
+                          const ProfileScreen().launch(context);
+                        },
+                        icon: const Icon(Icons.person))
                   ],
                 ).paddingRight(16),
                 Container(

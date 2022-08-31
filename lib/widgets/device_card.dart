@@ -12,9 +12,7 @@ Widget DeviceCard() {
                 Radius.circular(10),
               )),
           child:
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-              children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Container(
               margin: const EdgeInsets.only(right: 20),
               child: CircleAvatar(
@@ -38,8 +36,10 @@ Widget DeviceCard() {
                     )
                   ],
                 ),
-                const Text("Buldog, 2 years old", style: TextStyle(color: Colors.grey)),
-                const Text("1.2 km around here", style: TextStyle(color: Colors.grey))
+                const Text("Buldog, 2 years old",
+                    style: TextStyle(color: Colors.grey)),
+                const Text("1.2 km around here",
+                    style: TextStyle(color: Colors.grey))
               ],
             ),
             Material(
