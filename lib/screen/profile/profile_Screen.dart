@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lokapin_app/utils/colors.dart';
+import 'package:lokapin_app/widgets/pet_card.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/widgets/device_card.dart';
 
@@ -222,15 +223,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                Text("Your Devices",
-                        style: boldTextStyle(size: 20, weight: FontWeight.w600))
-                    .paddingAll(16),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                GridView.count(
+                  shrinkWrap: true,
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.83,
+                  padding: const EdgeInsets.all(0),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 0,
                   children: [
-                    DeviceCard(),
-                    DeviceCard(),
-                    DeviceCard(),
+                    PetCart(),
+                    PetCart(),
+                    PetCart(),
+
                   ],
                 ),
               ],
