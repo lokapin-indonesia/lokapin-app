@@ -28,8 +28,8 @@ class ProfileApi{
 
       if(response.statusCode==200){
         var sp = await SharedPreferenceHandler.getHandler();
-        var cookiesData = response.headers["set-cookie"];
-        sp.setToken(cookiesData);
+        // var cookiesData = response.headers["set-cookie"];
+        // sp.setToken(cookiesData);
       }
 
       return CustomHttpResponse(response.statusCode, bodyresp["message"], bodyresp);
