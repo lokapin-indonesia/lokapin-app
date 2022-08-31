@@ -58,7 +58,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           borderRadius: BorderRadius.circular(15)),
                       width: context.width(),
                       onTap: (() {
-                        const LoginScreen().launch(context);
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>LoginScreen()));
                       }))
                   .paddingOnly(
                       left: context.width() * 0.05,
