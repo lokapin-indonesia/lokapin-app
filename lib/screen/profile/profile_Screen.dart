@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lokapin_app/screen/profile/edit_profile_screen.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/widgets/pet_card.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -37,16 +38,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: boldTextStyle(color: Colors.black, size: 20),
             ),
             leading: Container(
-              margin: const EdgeInsets.all(8),
-              decoration: boxDecorationWithRoundedCorners(
-                backgroundColor: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.withOpacity(0.2)),
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-              ),
+            margin: const EdgeInsets.all(8),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black38,
+            ),
             ).onTap(() {
               finish(context);
             }),
@@ -177,7 +173,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           ),
                                                         ),
                                                       ),
-                                                      onPressed: () {}),
+                                                      onPressed: () {
+                                                        const EditProfileScreen().launch(context);
+                                                      }),
                                                 )
                                               ],
                                             ),

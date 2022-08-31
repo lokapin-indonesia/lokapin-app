@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lokapin_app/screen/profile/profile_Screen.dart';
-import 'package:lokapin_app/utils/colors.dart';
-import 'package:lokapin_app/utils/widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/widgets/device_card.dart';
 
 import '../../utils/backends/profile-api.dart';
 import '../../utils/sharedpref/sp-handler.dart';
-import '../../widgets/appbar.dart';
 
 class HomeScreen extends StatefulWidget {
   static String tag = '/HomeScreen';

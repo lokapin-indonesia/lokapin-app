@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'Lokapin',
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
-      home: const ProfileScreen(),
+      home: const SplashScreen(),
       theme: ThemeData(
           colorScheme:
               ColorScheme.fromSwatch().copyWith(secondary: primaryColor)),

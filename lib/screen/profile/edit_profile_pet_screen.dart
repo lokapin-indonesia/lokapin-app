@@ -60,11 +60,11 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
             style: boldTextStyle(color: Colors.black38, size: 20),
           ),
           leading: Container(
-           margin: const EdgeInsets.all(8),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black38,
-            ),
+          margin: const EdgeInsets.all(8),
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black38,
+          ),
           ).onTap(() {
             finish(context);
           }),
@@ -82,6 +82,67 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Center(
+                      child: Container(
+                        width: 125.0,
+                        height: 125.0,
+                        alignment: Alignment.center,
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              alignment: Alignment.center,
+                              child: CircleAvatar(
+                                  radius: 60,
+                                  backgroundColor:
+                                      Colors.white,
+                                  child: Padding(
+                                      padding:
+                                          const EdgeInsets
+                                              .all(5),
+                                      child: ClipOval(
+                                        child: Image.asset(
+                                            'assets/animal_profpic.png',
+                                            width: 125,
+                                            height: 125,
+                                            fit: BoxFit
+                                                .fitWidth),
+                                      ))),
+                            ),
+                          Align(
+                            alignment:
+                                Alignment.bottomRight,
+                            child: FloatingActionButton(
+                                elevation: 0,
+                                backgroundColor:
+                                    transparentColor,
+                                child: Ink(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors
+                                              .black,
+                                          width: 1),
+                                      color: Colors.white,
+                                      borderRadius:
+                                          BorderRadius
+                                              .circular(
+                                                  50.0)),
+                                  child: const Padding(
+                                    padding:
+                                        EdgeInsets.all(
+                                            5.0),
+                                    child: Icon(
+                                      Icons.edit,
+                                      size: 20.0,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {}),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                   Text("Pet Profile",
                     style: boldTextStyle(
                       size: 22, 
