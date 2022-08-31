@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
 import 'package:lokapin_app/widgets/appBar.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:lokapin_app/widgets/device_card.dart';
 
 class HomeScreen extends StatefulWidget {
   static String tag = '/HomeScreen';
@@ -35,18 +37,82 @@ class _HomeScreenState extends State<HomeScreen> {
             height: context.height(),
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/bg1.jpg'), fit: BoxFit.cover)),
+                    image: AssetImage('assets/bg_home.png'),
+                    fit: BoxFit.contain,
+                    alignment: Alignment.topCenter)),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // 50.height,
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(onPressed: () {}, icon: Icon(Icons.person))
+                  ],
+                ).paddingRight(16),
+                Container(
+                  margin: EdgeInsets.all(16),
+                  child: Stack(
+                    alignment: Alignment.topCenter,
+                    children: <Widget>[
+                      Container(
+                        width: context.width(),
+                        padding:
+                            EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                        margin: EdgeInsets.only(top: 55.0),
+                        decoration: boxDecorationWithShadow(
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  Text("Hi, Jessica",
+                                          style: boldTextStyle(
+                                              size: 30,
+                                              weight: FontWeight.w600))
+                                      .center(),
+                                  8.height,
+                                  Text("Your connected device",
+                                          style: boldTextStyle(
+                                              size: 20,
+                                              weight: FontWeight.normal))
+                                      .center(),
+                                  8.height,
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 100,
+                        width: 100,
+                        decoration: boxDecorationRoundedWithShadow(30),
+                        child: Icon(
+                          Icons.search,
+                          size: 60,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Text("Your Devices",
+                        style: boldTextStyle(size: 20, weight: FontWeight.w600))
+                    .paddingAll(16),
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.search,
-                      size: 64,
-                    ),
+                  children: [
+                    DeviceCard(),
+                    DeviceCard(),
+                    DeviceCard(),
                   ],
                 ),
               ],
