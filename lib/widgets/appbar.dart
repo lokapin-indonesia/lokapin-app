@@ -1,44 +1,135 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({Key? key}) : super(key: key);
+class NavBar extends StatefulWidget {
+  static String tag = '/NavBar';
+
+  const NavBar({Key? key}) : super(key: key);
+
+  @override
+  _NavBarState createState() => _NavBarState();
+}
+
+class _NavBarState extends State<NavBar> {
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: Home',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 1: Map',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: Search',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 3: Calendar',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      shape: const CircularNotchedRectangle(),
-      child: Container(
-        height: 75,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              iconSize: 30.0,
-              icon: Icon(Icons.home),
-              onPressed: () {},
-            ),
-            IconButton(
-              iconSize: 30.0,
-              icon: Icon(Icons.search),
-              onPressed: () {},
-            ),
-            IconButton(
-              iconSize: 30.0,
-              icon: Icon(Icons.notifications),
-              onPressed: () {},
-            ),
-            IconButton(
-              iconSize: 30.0,
-              icon: Icon(Icons.list),
-              onPressed: () {},
-            )
-          ],
-        ).paddingSymmetric(
-          horizontal: 50,
-        ),
-      ),
+    return BottomNavigationBar(
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+            icon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.white,
+                child: IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.home,
+                      color: Colors.black,
+                    ))),
+            label: '',
+            activeIcon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.blue,
+                child: IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.home,
+                      color: Colors.white,
+                    )))),
+        BottomNavigationBarItem(
+            icon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.white,
+                child: IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.map,
+                      color: Colors.black,
+                    ))),
+            label: '',
+            activeIcon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.blue,
+                child: IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.map,
+                      color: Colors.white,
+                    )))),
+        BottomNavigationBarItem(
+            icon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.white,
+                child: IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.location_searching,
+                      color: Colors.black,
+                    ))),
+            label: '',
+            activeIcon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.blue,
+                child: IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.location_searching,
+                      color: Colors.white,
+                    )))),
+          BottomNavigationBarItem(
+            icon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.white,
+                child: IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.add_task,
+                      color: Colors.black,
+                    ))),
+            label: '',
+            activeIcon: CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.blue,
+                child: IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.add_task,
+                      color: Colors.white,
+                    )))),
+      ],
+      currentIndex: _selectedIndex,
+      onTap: _onItemTapped,
+      selectedItemColor: Colors.white,
+      // backgroundColor: Colors.white,
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
     );
   }
 
