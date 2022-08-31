@@ -5,6 +5,8 @@ import 'package:lokapin_app/utils/widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/widgets/device_card.dart';
 
+import '../../utils/backends/profile-api.dart';
+import '../../utils/sharedpref/sp-handler.dart';
 import '../../widgets/appbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,6 +21,37 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var textFieldController = TextEditingController();
   FocusNode textFocusNode = FocusNode();
+  var sp  = SharedPreferenceHandler();
+
+  String userFullName = "-";
+
+  void changeShowName(result){
+    setState(() {
+      var name = result["first_name"];
+      if(result['last_name']!=null){
+        name = name + " " + result['last_name'];
+      }
+      userFullName = name;
+    });
+  }
+
+  void loadUserInfo() async{
+    var spInstance = await SharedPreferences.getInstance();
+    sp.setSharedPreference(spInstance);
+    var session = sp.getToken();
+    ProfileApi.getProfile(session).then((value) => {
+      if(value.status == 200){
+        changeShowName(value.data["result"])
+      }
+    });
+  }
+
+
+  @override
+  void initState() {
+    loadUserInfo();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          bottomNavigationBar: const NavBar(),
+          // bottomNavigationBar: const NavBar(),
           body: Container(
             width: context.width(),
             height: context.height(),
@@ -79,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(
                                     height: 50,
                                   ),
-                                  Text("Hi, Jessica",
+                                  Text("Hi, "+userFullName,
                                           style: boldTextStyle(
                                               size: 30,
                                               weight: FontWeight.w600))
