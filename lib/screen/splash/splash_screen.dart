@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lokapin_app/screen/home/home_screen.dart';
 import 'package:lokapin_app/screen/landing/landing_screen.dart';
 import 'package:lokapin_app/utils/backends/profile-api.dart';
+import 'package:lokapin_app/widgets/appbar.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../utils/colors.dart';
@@ -38,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if(sess.length>1){
         var res = await ProfileApi.getProfile(sess);
         if(res.status==200){
-          const HomeScreen().launch(context, isNewTask: true);
+          const NavBar().launch(context, isNewTask: true);
         }else{
           const LandingScreen().launch(context, isNewTask: true);
         }

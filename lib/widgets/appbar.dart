@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:lokapin_app/screen/home/home_screen.dart';
 
 class NavBar extends StatefulWidget {
   static String tag = '/NavBar';
@@ -15,10 +16,7 @@ class _NavBarState extends State<NavBar> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
+    HomeScreen(),
     Text(
       'Index 1: Map',
       style: optionStyle,
@@ -38,10 +36,11 @@ class _NavBarState extends State<NavBar> {
       _selectedIndex = index;
     });
   }
-
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
+    return Scaffold(
+      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+      bottomNavigationBar: BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
             icon: CircleAvatar(
@@ -130,6 +129,7 @@ class _NavBarState extends State<NavBar> {
       // backgroundColor: Colors.white,
       showSelectedLabels: false,
       showUnselectedLabels: false,
+    ),
     );
   }
 

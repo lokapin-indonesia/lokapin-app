@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          bottomNavigationBar: const NavBar(),
+          // bottomNavigationBar: const NavBar(),
           body: Container(
             width: context.width(),
             height: context.height(),

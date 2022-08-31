@@ -7,6 +7,7 @@ import 'package:lokapin_app/screen/register/register_screen.dart';
 import 'package:lokapin_app/utils/backends/auth-api.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
+import 'package:lokapin_app/widgets/appbar.dart';
 import 'package:lokapin_app/widgets/dialog.dart';
 // import 'package:mosaic/utils/jwt_helper.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -146,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             print(password);
                                             var resp = await AuthenticationAPI.loginRequest(email, password);
                                             if(resp.status == 200){
-                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>NavBar()));
                                             }else{
                                               showErrorAlertDialog(context, "Something wrong happened", resp.message, () => Navigator.pop(context));
                                             }
