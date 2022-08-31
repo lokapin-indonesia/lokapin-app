@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lokapin_app/constant.dart';
 import 'package:lokapin_app/screen/login/login_screen.dart';
+import 'package:lokapin_app/utils/backends/auth-api.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
 import 'package:lokapin_app/widgets/dialog.dart';
@@ -186,6 +187,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                   'Warning',
                                                   'Password and Confirm Password not match!',
                                                   () => Navigator.pop(context));
+                                            }else{
+                                              var resp = await AuthenticationAPI.registerRequest(name, email, password);
+                                              if(resp.status==201){
+                                                showSuccessfulAlertDialog(context, "Berhasil Daftar", "Pendaftaran akun anda berhasil, silahkan login", () => {
+                                                  LoginScreen().launch(context)
+                                                });
+                                              } else {
+                                                showErrorAlertDialog(context, "Failed register", resp.message, ()=>Navigator.pop(context));
+                                              }
                                             }
                                           }
                                           // WAEditProfileScreen(isEditProfile: false).launch(context);

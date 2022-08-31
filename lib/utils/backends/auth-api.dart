@@ -37,4 +37,28 @@ class AuthenticationAPI{
     }
     return CustomHttpResponse(response.statusCode, response.body, blankResp);
   }
+
+  static Future<CustomHttpResponse<Map<String, dynamic>>> registerRequest(name, email, pass) async{
+    var thisHeader = {
+      HttpHeaders.contentTypeHeader: "multipart/form-data",
+      HttpHeaders.acceptHeader: "application/json"
+    };
+
+    var data = {
+      "username" : email,
+      "email" : email,
+      "password": pass,
+      "first_name" :  name
+    };
+    var response = await http.post(Uri.parse(Constant.URL_BE +"user/register"), body: data);
+    var blankResp = json.decode("{}")as Map<String, dynamic>;
+    if(response.statusCode<500){
+      var bodyresp = json.decode(response.body) as Map<String, dynamic>;
+      if(response.statusCode == 201){
+        return CustomHttpResponse(response.statusCode, bodyresp["message"], bodyresp);
+      }
+      return CustomHttpResponse(response.statusCode, bodyresp["message"], blankResp);
+    }
+    return CustomHttpResponse(response.statusCode, response.body, blankResp);
+  }
 }
