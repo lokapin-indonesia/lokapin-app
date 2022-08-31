@@ -3,13 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lokapin_app/constant.dart';
-import 'package:lokapin_app/screen/home/home_Screen.dart';
 import 'package:lokapin_app/screen/register/register_screen.dart';
+import 'package:lokapin_app/utils/backends/auth-api.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
 import 'package:lokapin_app/widgets/dialog.dart';
 // import 'package:mosaic/utils/jwt_helper.dart';
 import 'package:nb_utils/nb_utils.dart';
+
+import '../home/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = '/loginScreen';
@@ -142,7 +144,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                             print(email);
                                             print(password);
-                                            const HomeScreen().launch(context);
+                                            var resp = await AuthenticationAPI.loginRequest(email, password);
+                                            if(resp.status == 200){
+                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                                            }else{
+                                              showErrorAlertDialog(context, "Something wrong happened", resp.message, () => Navigator.pop(context));
+                                            }
                                           }
                                           // WAEditProfileScreen(isEditProfile: false).launch(context);
                                         }),

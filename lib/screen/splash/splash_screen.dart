@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:lokapin_app/screen/home/home_screen.dart';
 import 'package:lokapin_app/screen/landing/landing_screen.dart';
+import 'package:lokapin_app/utils/backends/profile-api.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../utils/colors.dart';
+import '../../utils/sharedpref/sp-handler.dart';
 
 class SplashScreen extends StatefulWidget {
   static String tag = '/WASplashScreen';
@@ -20,11 +25,28 @@ class _SplashScreenState extends State<SplashScreen> {
     init();
   }
 
-  Future<void> init() async {
+  init() async {
     setStatusBarColor(primaryColor, statusBarIconBrightness: Brightness.light);
-    await Future.delayed(const Duration(seconds: 3));
-    if (mounted) finish(context);
-    const LandingScreen().launch(context, isNewTask: true);
+    var durasi = const Duration(seconds: 3);
+    print("object");
+    return Timer(durasi, () async {
+      var spInstance = await SharedPreferences.getInstance();
+      var sp  = SharedPreferenceHandler();
+      sp.setSharedPreference(spInstance);
+      var sess = sp.getToken();
+      print(sess);
+      if(sess.length>1){
+        var res = await ProfileApi.getProfile(sess);
+        if(res.status==200){
+          const HomeScreen().launch(context, isNewTask: true);
+        }else{
+          const LandingScreen().launch(context, isNewTask: true);
+        }
+      }else{
+        const LandingScreen().launch(context, isNewTask: true);
+      }
+      //const LandingScreen().launch(context, isNewTask: true);
+    });
   }
 
   @override
