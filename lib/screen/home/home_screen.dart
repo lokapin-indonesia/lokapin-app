@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          bottomNavigationBar: const CustomAppBar(),
+          bottomNavigationBar: const NavBar(),
           body: Container(
             width: context.width(),
             height: context.height(),
@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: context.width(),
                         padding:
                             EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                        margin: EdgeInsets.only(top: 55.0),
+                        margin: EdgeInsets.only(top: 34.0),
                         decoration: boxDecorationWithShadow(
                             borderRadius: BorderRadius.circular(30)),
                         child: Column(
@@ -125,16 +125,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 100,
-                        width: 100,
-                        decoration: boxDecorationRoundedWithShadow(30),
-                        child: Icon(
-                          Icons.search,
-                          size: 60,
-                        ),
-                      )
+                      CircleAvatar(
+                          radius: 35,
+                          backgroundColor: Colors.white,
+                          child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: ClipOval(
+                                child: Image.asset('assets/animal_profpic.png',
+                                    width: 140,
+                                    height: 140,
+                                    fit: BoxFit.fitWidth),
+                              )))
                     ],
                   ),
                 ),
