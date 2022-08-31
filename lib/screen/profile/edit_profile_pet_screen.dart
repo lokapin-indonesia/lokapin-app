@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -52,6 +53,25 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(
+            'Edit Profile',
+            style: boldTextStyle(color: Colors.black38, size: 20),
+          ),
+          leading: Container(
+           margin: const EdgeInsets.all(8),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black38,
+            ),
+          ).onTap(() {
+            finish(context);
+          }),
+          centerTitle: true,
+          elevation: 0.0,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
         body: Container(
           padding: const EdgeInsets.all(10),
           width: context.width(),

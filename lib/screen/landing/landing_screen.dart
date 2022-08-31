@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lokapin_app/screen/login/login_screen.dart';
+import 'package:lokapin_app/screen/profile/edit_profile_screen.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -58,7 +59,8 @@ class _LandingScreenState extends State<LandingScreen> {
                           borderRadius: BorderRadius.circular(15)),
                       width: context.width(),
                       onTap: (() {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>LoginScreen()));
+                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>LoginScreen()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>EditProfileScreen()));
                       }))
                   .paddingOnly(
                       left: context.width() * 0.05,
