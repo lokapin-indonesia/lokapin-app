@@ -23,7 +23,7 @@ class PetApi{
     };
 
     var data = {
-      "hardware_id" : "lokapin-oCGG-1SqH-kbC2-nNq1",
+      "hardware_id" : "lokapin-CgVu-6lu3-gElC-MDEf",
       "name" :  name,
       "breed": breed,
       "gender": gender

@@ -203,8 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(10)),
                             elevation: 0,
                             onTap: () {
-                              const AddProfilePetScreen()
-                                  .launch(context);
+                              const AddProfilePetScreen().launch(context);
                             },
                             child: Text(
                               "+ Add New Pet",
