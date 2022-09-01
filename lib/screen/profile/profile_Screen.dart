@@ -23,6 +23,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   FocusNode textFocusNode = FocusNode();
   var sp  = SharedPreferenceHandler();
   String userFullName = "-";
+  String userAge  = "-";
+  String userPhone = "-";
+  String userAddress = "-";
 
   void changeShowName(result){
     setState(() {
@@ -31,6 +34,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         name = name + " " + result['last_name'];
       }
       userFullName = name;
+      if(result['age']!=null){
+        userAge = result['age'].toString();
+      }
+      if(result["phone_number"] != null){
+        userPhone = result["phone_number"];
+      }
+      if(result["address"]!=null){
+        userAddress = result["address"];
+      }
     });
   }
 
@@ -125,12 +137,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             8.width
                                           ],
                                         ),
-                                        Text("28 years old",
+                                        Text(userAge+" years old",
                                             style: boldTextStyle(
                                                 size: 17,
                                                 weight: FontWeight.w300)),
 
-                                        Text("08570883321",
+                                        Text(userPhone,
                                             style: boldTextStyle(
                                                 size: 16,
                                                 weight: FontWeight.normal)),
@@ -140,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 size: 20,
                                                 weight: FontWeight.normal)),
                                         Text(
-                                            "Jl. Gubeng Kertajaya VI A No.46, Kertajaya, Kec. Gubeng, Kota SBY, Jawa Timur 60282",
+                                            userAddress,
                                             style: boldTextStyle(
                                                 size: 12,
                                                 weight: FontWeight.w300))

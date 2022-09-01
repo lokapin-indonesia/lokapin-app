@@ -37,7 +37,7 @@ class ProfileApi{
     return CustomHttpResponse(response.statusCode, response.body, blankResp);
   }
 
-  static Future<CustomHttpResponse<Map<String, dynamic>>> editUserRequest(name) async{
+  static Future<CustomHttpResponse<Map<String, dynamic>>> editUserRequest({name, phone = null, address=null, age=null}) async{
     var token = await SharedPreferenceHandler.getHandler();
     var thisHeader = {
       HttpHeaders.cookieHeader : token.getToken()
@@ -46,6 +46,18 @@ class ProfileApi{
     var data = {
       "first_name" :  name,
     };
+
+    if(phone!= null){
+      data["phone_number"] = phone.toString();
+    }
+
+    if(address!=null){
+      data["address"] = address;
+    }
+
+    if(age!=null){
+      data["age"] = age.toString();
+    }
 
     var response = await http.patch(Uri.parse(Constant.URL_BE +"user/profile"), body: data, headers: thisHeader);
     var blankResp = json.decode("{}")as Map<String, dynamic>;

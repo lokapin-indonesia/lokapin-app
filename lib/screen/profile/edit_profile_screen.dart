@@ -32,6 +32,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var sp  = SharedPreferenceHandler();
 
   String userFullName = "-";
+  String userAge  = "-";
+  String userPhone = "-";
+  String userAddress = "-";
 
   void changeShowName(result){
     setState(() {
@@ -40,6 +43,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         name = name + " " + result['last_name'];
       }
       fullnameController.text = name;
+      if(result['age']!=null){
+        ageController.text = result['age'].toString();
+      }
+      if(result["phone_number"] != null){
+        phoneController.text = result["phone_number"];
+      }
+      if(result["address"]!=null){
+        addressController.text = result["address"];
+      }
     });
   }
 
@@ -260,7 +272,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   width: context.width(),
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      ProfileApi.editUserRequest(fullnameController.text.toString()).then((value) => {
+                      ProfileApi.editUserRequest(
+                        name: fullnameController.text.toString(),
+                        phone: phoneController.text.toString(),
+                        age: ageController.text.toString(),
+                        address: addressController.text.toString()
+                      ).then((value) => {
                         if(value.status==200){
                           showSuccessfulAlertDialog(context, "Berhasil Save Data Baru", "", () => Navigator.pop(context))
                         }else{
