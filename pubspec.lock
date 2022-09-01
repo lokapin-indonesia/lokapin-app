@@ -14,7 +14,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.9.0"
+    version: "2.8.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -49,14 +49,21 @@ packages:
       name: characters
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.0"
+  charcode:
+    dependency: transitive
+    description:
+      name: charcode
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.1"
   clock:
     dependency: transitive
     description:
       name: clock
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.0"
   collection:
     dependency: transitive
     description:
@@ -147,11 +154,7 @@ packages:
       name: fake_async
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.3.0"
-=======
-    version: "1.3.1"
->>>>>>> 7800dccd062f103dd13ba7311ff6cdb77b78c512
   ffi:
     dependency: transitive
     description:
@@ -313,25 +316,21 @@ packages:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.12"
+    version: "0.12.11"
   material_color_utilities:
     dependency: transitive
     description:
       name: material_color_utilities
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.1.4"
-=======
-    version: "0.1.5"
->>>>>>> 7800dccd062f103dd13ba7311ff6cdb77b78c512
   meta:
     dependency: transitive
     description:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.7.0"
   nb_utils:
     dependency: "direct main"
     description:
@@ -359,11 +358,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.8.1"
-=======
-    version: "1.8.2"
->>>>>>> 7800dccd062f103dd13ba7311ff6cdb77b78c512
   path_provider:
     dependency: transitive
     description:
@@ -529,11 +524,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.8.2"
-=======
-    version: "1.9.0"
->>>>>>> 7800dccd062f103dd13ba7311ff6cdb77b78c512
   sqflite:
     dependency: transitive
     description:
@@ -568,7 +559,7 @@ packages:
       name: string_scanner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.0"
   synchronized:
     dependency: transitive
     description:
@@ -582,18 +573,14 @@ packages:
       name: term_glyph
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.0"
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.4.9"
-=======
-    version: "0.4.12"
->>>>>>> 7800dccd062f103dd13ba7311ff6cdb77b78c512
   typed_data:
     dependency: transitive
     description:
@@ -638,8 +625,4 @@ packages:
     version: "5.3.1"
 sdks:
   dart: ">=2.17.0-0 <3.0.0"
-<<<<<<< HEAD
-  flutter: ">=2.10.0-0"
-=======
   flutter: ">=2.10.0"
->>>>>>> 7800dccd062f103dd13ba7311ff6cdb77b78c512
