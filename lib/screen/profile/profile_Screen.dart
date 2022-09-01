@@ -317,7 +317,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               borderRadius: BorderRadius.circular(15)),
                           width: context.width(),
                           onTap: () async {})
-                      .paddingAll(20),
+                      .paddingSymmetric(vertical: 10, horizontal: 20),
+                  AppButton(
+                          text: "Log out",
+                          textColor: Colors.red,
+                          color: white,
+                          shapeBorder: RoundedRectangleBorder(
+                              side: BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(15)),
+                          width: context.width(),
+                          onTap: () async {})
+                      .paddingSymmetric(vertical: 10, horizontal: 20)
                 ],
               )
             ],
