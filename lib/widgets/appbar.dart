@@ -23,7 +23,7 @@ class _NavBarState extends State<NavBar> {
       'Index 1: Map',
       style: optionStyle,
     ),
-    AddProfilePetScreen(),
+    ConstructionScreen(),
     ConstructionScreen(),
   ];
 
