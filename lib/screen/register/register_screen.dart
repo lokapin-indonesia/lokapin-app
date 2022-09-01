@@ -177,10 +177,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 confirmPasswordController.text
                                                     .toString();
 
-                                            print(name);
-                                            print(email);
-                                            print(password);
-                                            print(confirmPassword);
                                             if (password != confirmPassword) {
                                               showErrorAlertDialog(
                                                   context,

@@ -36,4 +36,26 @@ class ProfileApi{
     }
     return CustomHttpResponse(response.statusCode, response.body, blankResp);
   }
+
+  static Future<CustomHttpResponse<Map<String, dynamic>>> editUserRequest(name) async{
+    var token = await SharedPreferenceHandler.getHandler();
+    var thisHeader = {
+      HttpHeaders.cookieHeader : token.getToken()
+    };
+
+    var data = {
+      "first_name" :  name,
+    };
+
+    var response = await http.patch(Uri.parse(Constant.URL_BE +"user/profile"), body: data, headers: thisHeader);
+    var blankResp = json.decode("{}")as Map<String, dynamic>;
+    if(response.statusCode<500){
+      var bodyresp = json.decode(response.body) as Map<String, dynamic>;
+      if(response.statusCode == 201){
+        return CustomHttpResponse(response.statusCode, bodyresp["message"], bodyresp);
+      }
+      return CustomHttpResponse(response.statusCode, bodyresp["message"], blankResp);
+    }
+    return CustomHttpResponse(response.statusCode, response.body, blankResp);
+  }
 }

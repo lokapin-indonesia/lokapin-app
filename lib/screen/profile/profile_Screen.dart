@@ -6,6 +6,9 @@ import 'package:lokapin_app/widgets/pet_card.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/widgets/device_card.dart';
 
+import '../../utils/backends/profile-api.dart';
+import '../../utils/sharedpref/sp-handler.dart';
+
 class ProfileScreen extends StatefulWidget {
   static String tag = '/ProfileScreen';
 
@@ -18,6 +21,35 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   var textFieldController = TextEditingController();
   FocusNode textFocusNode = FocusNode();
+  var sp  = SharedPreferenceHandler();
+  String userFullName = "-";
+
+  void changeShowName(result){
+    setState(() {
+      var name = result["first_name"];
+      if(result['last_name']!=null){
+        name = name + " " + result['last_name'];
+      }
+      userFullName = name;
+    });
+  }
+
+  void loadUserInfo() async{
+    var spInstance = await SharedPreferences.getInstance();
+    sp.setSharedPreference(spInstance);
+    var session = sp.getToken();
+    ProfileApi.getProfile(session).then((value) => {
+      if(value.status == 200){
+        changeShowName(value.data["result"])
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    loadUserInfo();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,17 +118,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
                                           children: [
-                                            Text("Jessica",
+                                            Text(userFullName,
                                                 style: boldTextStyle(
                                                     size: 30,
                                                     weight: FontWeight.w700)),
-                                            8.width,
-                                            Text("28 years old",
-                                                style: boldTextStyle(
-                                                    size: 17,
-                                                    weight: FontWeight.w300))
+                                            8.width
                                           ],
                                         ),
+                                        Text("28 years old",
+                                            style: boldTextStyle(
+                                                size: 17,
+                                                weight: FontWeight.w300)),
+
                                         Text("08570883321",
                                             style: boldTextStyle(
                                                 size: 16,

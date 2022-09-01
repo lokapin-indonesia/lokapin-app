@@ -4,6 +4,10 @@ import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../utils/backends/profile-api.dart';
+import '../../utils/sharedpref/sp-handler.dart';
+import '../../widgets/dialog.dart';
+
 class EditProfileScreen extends StatefulWidget {
   static String tag = '/editprofileScreen';
   
@@ -23,9 +27,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   FocusNode addressFocusNode = FocusNode();
   var ageController = TextEditingController();
   FocusNode ageFocusNode = FocusNode();
+
+
+  var sp  = SharedPreferenceHandler();
+
+  String userFullName = "-";
+
+  void changeShowName(result){
+    setState(() {
+      var name = result["first_name"];
+      if(result['last_name']!=null){
+        name = name + " " + result['last_name'];
+      }
+      fullnameController.text = name;
+    });
+  }
+
+  void loadUserInfo() async{
+    var spInstance = await SharedPreferences.getInstance();
+    sp.setSharedPreference(spInstance);
+    var session = sp.getToken();
+    ProfileApi.getProfile(session).then((value) => {
+      if(value.status == 200){
+        changeShowName(value.data["result"])
+      }
+    });
+  }
   
   @override
   void initState() {
+    loadUserInfo();
     super.initState();
     init();
   }
@@ -229,7 +260,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   width: context.width(),
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      
+                      ProfileApi.editUserRequest(fullnameController.text.toString()).then((value) => {
+                        if(value.status==200){
+                          showSuccessfulAlertDialog(context, "Berhasil Save Data Baru", "", () => Navigator.pop(context))
+                        }else{
+                          showErrorAlertDialog(context, "Gagal save data baru", value.message, () => Navigator.pop(context))
+                        }
+                      });
                     }
                   }
                 ),
