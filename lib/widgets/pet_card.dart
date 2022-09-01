@@ -34,15 +34,14 @@ class PetCard extends StatelessWidget {
                     Text(petData?.name ?? "-",
                         style:
                             boldTextStyle(size: 22, weight: FontWeight.w600)),
-                    Text(petData?.breeds ?? "-",
+                    Text(petData?.breed ?? "-",
                         style:
                             boldTextStyle(size: 12, weight: FontWeight.normal)),
                     2.height,
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                            "${DateTime.now().year - (petData?.birthDate?.year ?? 0)} year old",
+                        Text("${petData?.age ?? 0} year old",
                             style: boldTextStyle(
                                 size: 12, weight: FontWeight.normal)),
                         8.height,
@@ -75,7 +74,7 @@ class PetCard extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       child: ClipOval(
                         child: Image.asset(
-                            petData?.image ?? 'assets/animal_profpic.png',
+                            petData?.photo ?? 'assets/animal_profpic.png',
                             width: 70,
                             height: 70,
                             fit: BoxFit.fitWidth),
