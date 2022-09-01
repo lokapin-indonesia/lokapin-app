@@ -19,41 +19,42 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var textFieldController = TextEditingController();
   FocusNode textFocusNode = FocusNode();
-  var sp  = SharedPreferenceHandler();
+  var sp = SharedPreferenceHandler();
 
   String userFullName = "-";
-  String userImage = "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
+  String userImage =
+      "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
 
-  void changeShowName(result){
+  void changeShowName(result) {
     setState(() {
       var name = result["first_name"];
-      if(result['last_name']!=null){
+      if (result['last_name'] != null) {
         name = name + " " + result['last_name'];
       }
       userFullName = name;
     });
   }
 
-  void loadImage(imgurl){
-    if(imgurl!=null){
+  void loadImage(imgurl) {
+    if (imgurl != null) {
       setState(() {
-        userImage = "http://108.136.230.107/static/image/user/"+imgurl;
+        userImage = "http://108.136.230.107/static/image/user/" + imgurl;
       });
     }
   }
 
-  void loadUserInfo() async{
+  void loadUserInfo() async {
     var spInstance = await SharedPreferences.getInstance();
     sp.setSharedPreference(spInstance);
     var session = sp.getToken();
     ProfileApi.getProfile(session).then((value) => {
-      if(value.status == 200){
-        changeShowName(value.data["result"]),
-        loadImage(value.data["result"]["photo"])
-      }
-    });
+          if (value.status == 200)
+            {
+              changeShowName(value.data["result"]),
+              loadImage(value.data["result"]["photo"])
+            }
+        });
   }
-
 
   @override
   void initState() {
@@ -120,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(
                                     height: 50,
                                   ),
-                                  Text("Hi, "+userFullName,
+                                  Text("Hi, " + userFullName,
                                           style: boldTextStyle(
                                               size: 30,
                                               weight: FontWeight.w600))
