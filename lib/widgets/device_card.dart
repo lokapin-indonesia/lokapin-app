@@ -84,7 +84,7 @@ class _DeviceCardState extends State<DeviceCard> {
               child: Ink(
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width: 2),
-                    color: Colors.white,
+                    color: bgColor,
                     borderRadius: BorderRadius.circular(50.0)),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(100.0),
