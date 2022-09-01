@@ -40,6 +40,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   rflutter_alert: ^2.0.4
   shared_preferences:
+  cached_network_image:
 
 dev_dependencies:
   flutter_test:

@@ -35,6 +35,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String userAge  = "-";
   String userPhone = "-";
   String userAddress = "-";
+  String userImage = "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
 
   void changeShowName(result){
     setState(() {
@@ -51,6 +52,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       }
       if(result["address"]!=null){
         addressController.text = result["address"];
+      }
+      if(result["photo"] != null){
+        userImage = "http://108.136.230.107/static/image/user/"+result["photo"];
       }
     });
   }
@@ -138,8 +142,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           const EdgeInsets
                                               .all(5),
                                       child: ClipOval(
-                                        child: Image.asset(
-                                            'assets/animal_profpic.png',
+                                        child: Image.network(
+                                            userImage,
                                             width: 125,
                                             height: 125,
                                             fit: BoxFit

@@ -26,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String userAge  = "-";
   String userPhone = "-";
   String userAddress = "-";
+  String userImage = "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
 
   void changeShowName(result){
     setState(() {
@@ -42,6 +43,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       if(result["address"]!=null){
         userAddress = result["address"];
+      }
+
+      if(result["photo"] != null){
+        userImage = "http://108.136.230.107/static/image/user/"+result["photo"];
       }
     });
   }
@@ -154,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         Text(
                                             userAddress,
                                             style: boldTextStyle(
-                                                size: 12,
+                                                size: 14,
                                                 weight: FontWeight.w300))
                                       ],
                                     ),
@@ -181,8 +186,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                               const EdgeInsets
                                                                   .all(5),
                                                           child: ClipOval(
-                                                            child: Image.asset(
-                                                                'assets/animal_profpic.png',
+                                                            child: Image.network(
+                                                                userImage,
                                                                 width: 200,
                                                                 height: 200,
                                                                 fit: BoxFit

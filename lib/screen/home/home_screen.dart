@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lokapin_app/screen/profile/profile_Screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/widgets/device_card.dart';
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var sp  = SharedPreferenceHandler();
 
   String userFullName = "-";
+  String userImage = "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
 
   void changeShowName(result){
     setState(() {
@@ -32,13 +34,22 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void loadImage(imgurl){
+    if(imgurl!=null){
+      setState(() {
+        userImage = "http://108.136.230.107/static/image/user/"+imgurl;
+      });
+    }
+  }
+
   void loadUserInfo() async{
     var spInstance = await SharedPreferences.getInstance();
     sp.setSharedPreference(spInstance);
     var session = sp.getToken();
     ProfileApi.getProfile(session).then((value) => {
       if(value.status == 200){
-        changeShowName(value.data["result"])
+        changeShowName(value.data["result"]),
+        loadImage(value.data["result"]["photo"])
       }
     });
   }
@@ -133,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Padding(
                               padding: const EdgeInsets.all(5),
                               child: ClipOval(
-                                child: Image.asset('assets/animal_profpic.png',
+                                child: Image.network(userImage,
                                     width: 140,
                                     height: 140,
                                     fit: BoxFit.fitWidth),
