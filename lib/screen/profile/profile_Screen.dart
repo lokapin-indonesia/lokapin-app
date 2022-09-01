@@ -10,6 +10,7 @@ import 'package:lokapin_app/widgets/pet_card.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/widgets/device_card.dart';
 
+import '../../utils/backends/pets-api.dart';
 import '../../utils/backends/profile-api.dart';
 import '../../utils/sharedpref/sp-handler.dart';
 import '../../widgets/dialog.dart';
@@ -34,6 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String userImage =
       "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
 
+  var petList = [];
   void logout() {
     AuthenticationAPI.logoutApi().then((value) => {
       sp.revokeToken(),
@@ -74,9 +76,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
   }
 
+  void loadPets() async {
+    var response = await PetsApi.getMyPets();
+    if(response.status == 200){
+      var resplist = response.data["result"] as List<dynamic>;
+      var arr = [];
+      for(var i=0;i<resplist.length;i++){
+        var singleResp = resplist[i];
+        String gambar = "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
+        if(singleResp["photo"] != null){
+          gambar = "http://108.136.230.107/static/image/pet/" + singleResp["photo"];
+        }
+        arr.add(
+            PetCard(
+                petData: PetModels(
+                  id: singleResp["id"].toString(),
+                  hardwareId: singleResp["hardware_id"],
+                  name: singleResp["name"],
+                  photo: gambar,
+                  species: singleResp["species"],
+                  breed: singleResp["breed"],
+                  gender: singleResp["gender"],
+                  weight: 3,
+                  age: singleResp["age"],
+                  lat: singleResp["lat"].toString(),
+                  long: singleResp["long"].toString(),
+                  lastUpdated: DateTime.tryParse(singleResp["last_updated"]),
+                  lastPing: DateTime.now(),
+                ),
+                editPet: (id) => {
+                  const EditProfilePetScreen().launch(context),
+                  print(id)
+                })
+        );
+      }
+
+      setState(() {
+        petList = arr;
+      });
+    }
+  }
+
   @override
   void initState() {
     loadUserInfo();
+    loadPets();
     super.initState();
   }
 
@@ -260,78 +304,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisCount: 2,
                     mainAxisSpacing: 20,
                     children: [
-                      //                 "id": 5,
-                      // "hardware_id": "lokapin-SXM3-M6qW-uY17-WVXJ",
-                      // "name": "kewan 1",
-                      // "photo": "cl7j3136b00034vmx9z5ibr4p.png",
-                      // "species": "bulbasaurr",
-                      // "breed": "breeding gan",
-                      // "gender": "no gender",
-                      // "age": 10,
-                      // "lat": null,
-                      // "long": null,
-                      // "last_updated": "2022-09-01T13:27:49.341Z",
-                      // "last_ping": null
-                      PetCard(
-                          petData: PetModels(
-                            id: "123123",
-                            hardwareId: "1231",
-                            name: "Kucing",
-                            photo: null,
-                            species: "Persia",
-                            breed: "Persia",
-                            gender: "Male",
-                            weight: 3,
-                            age: 3,
-                            lat: "asd",
-                            long: "asd",
-                            lastUpdated: DateTime.now(),
-                            lastPing: DateTime.now(),
-                          ),
-                          editPet: (id) => {
-                                const EditProfilePetScreen().launch(context),
-                                print(id)
-                              }),
-                      PetCard(
-                          petData: PetModels(
-                            id: "123123",
-                            hardwareId: "1231",
-                            name: "Kucing",
-                            photo: null,
-                            species: "Persia",
-                            breed: "Persia",
-                            gender: "Female",
-                            weight: 3,
-                            age: 3,
-                            lat: "asd",
-                            long: "asd",
-                            lastUpdated: DateTime.now(),
-                            lastPing: DateTime.now(),
-                          ),
-                          editPet: (id) => {
-                                const EditProfilePetScreen().launch(context),
-                                print(id)
-                              }),
-                      PetCard(
-                          petData: PetModels(
-                            id: "123123",
-                            hardwareId: "1231",
-                            name: "Kucing",
-                            photo: null,
-                            species: "Persia",
-                            breed: "Persia",
-                            gender: "Male",
-                            weight: 3,
-                            age: 3,
-                            lat: "asd",
-                            long: "asd",
-                            lastUpdated: DateTime.now(),
-                            lastPing: DateTime.now(),
-                          ),
-                          editPet: (id) => {
-                                const EditProfilePetScreen().launch(context),
-                                print(id)
-                              }),
+                      ...petList
                     ],
                   ),
                   64.height,

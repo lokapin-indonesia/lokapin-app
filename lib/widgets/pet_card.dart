@@ -88,7 +88,7 @@ class PetCard extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: ClipOval(
-                        child: Image.asset(
+                        child: Image.network(
                             petData?.photo ?? 'assets/animal_profpic.png',
                             width: 70,
                             height: 70,
