@@ -31,9 +31,24 @@ class PetCard extends StatelessWidget {
                     const SizedBox(
                       height: 50,
                     ),
-                    Text(petData?.name ?? "-",
-                        style:
-                            boldTextStyle(size: 22, weight: FontWeight.w600)),
+                    Row(
+                      children: [
+                        Text(petData?.name ?? "-",
+                            style: boldTextStyle(
+                                size: 22, weight: FontWeight.w600)),
+                        petData?.gender!.toLowerCase() == "male"
+                            ? Icon(
+                                Icons.male,
+                                size: 18.0,
+                                color: Colors.black,
+                              )
+                            : Icon(
+                                Icons.female,
+                                size: 18.0,
+                                color: Colors.black,
+                              )
+                      ],
+                    ),
                     Text(petData?.breed ?? "-",
                         style:
                             boldTextStyle(size: 12, weight: FontWeight.normal)),

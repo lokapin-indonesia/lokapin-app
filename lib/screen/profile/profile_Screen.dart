@@ -300,7 +300,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             photo: null,
                             species: "Persia",
                             breed: "Persia",
-                            gender: "Male",
+                            gender: "Female",
                             weight: 3,
                             age: 3,
                             lat: "asd",
