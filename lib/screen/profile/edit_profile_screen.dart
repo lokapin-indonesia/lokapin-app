@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/utils/widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -36,6 +39,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String userPhone = "-";
   String userAddress = "-";
   String userImage = "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
+  String? newImage = null;
 
   void changeShowName(result){
     setState(() {
@@ -87,6 +91,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
+  }
+
+  void imagePicker() async {
+    try{
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if(image==null){
+        showErrorAlertDialog(context, "Fail select image", 'No image selected', () { Navigator.pop(context);});
+        return;
+      }
+      print("cuyyy");
+      ProfileApi.replaceUserImage(image.path).then((value) => {
+        if(value.status==200){
+          print("cikurrr"),
+          print(value.data)
+        }
+      });
+    }on PlatformException catch(e){
+      showErrorAlertDialog(context, "Fail select image", '', () { Navigator.pop(context);});
+    }
   }
   
   @override
@@ -179,7 +202,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     ),
                                   ),
                                 ),
-                                onPressed: () {}),
+                                onPressed: () {
+                                  imagePicker();
+                                }),
                           )
                         ],
                       ),
@@ -280,7 +305,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         name: fullnameController.text.toString(),
                         phone: phoneController.text.toString(),
                         age: ageController.text.toString(),
-                        address: addressController.text.toString()
+                        address: addressController.text.toString(),
+                        image: newImage
                       ).then((value) => {
                         if(value.status==200){
                           showSuccessfulAlertDialog(context, "Berhasil Save Data Baru", "", () => Navigator.pop(context))
