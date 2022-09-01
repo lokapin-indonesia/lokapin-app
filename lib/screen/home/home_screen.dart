@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         DeviceCard(),
                         DeviceCard(),
                         AppButton(
-                            width: context.width()-30,
+                            width: context.width() - 30,
                             height: 90,
                             shapeBorder: RoundedRectangleBorder(
                                 side: const BorderSide(
