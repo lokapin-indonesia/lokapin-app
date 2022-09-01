@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lokapin_app/models/PetModels.dart';
+import 'package:lokapin_app/screen/login/login_screen.dart';
 import 'package:lokapin_app/screen/profile/edit_profile_pet_screen.dart';
 import 'package:lokapin_app/screen/profile/edit_profile_screen.dart';
+import 'package:lokapin_app/utils/backends/auth-api.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/widgets/pet_card.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -10,6 +12,7 @@ import 'package:lokapin_app/widgets/device_card.dart';
 
 import '../../utils/backends/profile-api.dart';
 import '../../utils/sharedpref/sp-handler.dart';
+import '../../widgets/dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   static String tag = '/ProfileScreen';
@@ -30,6 +33,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String userAddress = "-";
   String userImage =
       "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
+
+  void logout() {
+    AuthenticationAPI.logoutApi().then((value) => {
+      sp.revokeToken(),
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()))
+    });
+  }
 
   void changeShowName(result) {
     setState(() {
@@ -342,7 +352,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               side: BorderSide(color: Colors.red),
                               borderRadius: BorderRadius.circular(15)),
                           width: context.width(),
-                          onTap: () async {})
+                          onTap: () async {
+                            logout();
+                          })
                       .paddingSymmetric(vertical: 10, horizontal: 20)
                 ],
               )
