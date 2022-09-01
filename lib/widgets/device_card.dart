@@ -1,14 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-Widget DeviceCard() {
-  return Card(
-          shape: const RoundedRectangleBorder(
+class DeviceCard extends StatefulWidget {
+  static String tag = '/DeviceCard';
+
+  DeviceCard({Key? key}) : super(key: key);
+
+  @override
+  _DeviceCardState createState() => _DeviceCardState();
+
+}
+
+class _DeviceCardState extends State<DeviceCard> {
+  Color bgColor = Colors.white;
+  Color borderColor = Colors.black;
+
+  void _changeBgColor(PointerEvent details){
+        setState(() {
+          if(bgColor == Colors.white){
+            bgColor = const Color.fromRGBO(252, 231, 108, 1);
+          }else{
+            bgColor = Colors.white;
+          }
+
+          if(borderColor == Colors.black){
+            setState(() {
+              borderColor = const Color.fromRGBO(252, 231, 108, 1);
+            });
+          }else{
+            borderColor = Colors.black;
+          }
+        });
+      }
+
+  @override 
+  Widget build(BuildContext context){
+    return MouseRegion(
+      onEnter: _changeBgColor,
+      onExit: _changeBgColor,
+      child: Card(
+        color: bgColor,
+          shape: RoundedRectangleBorder(
               side: BorderSide(
-                color: Colors.black,
+                color: borderColor,
                 width: 2.5,
               ),
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(10),
               )),
           child:
@@ -47,7 +84,7 @@ Widget DeviceCard() {
               child: Ink(
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width: 2),
-                    color: Colors.white,
+                    color: bgColor,
                     borderRadius: BorderRadius.circular(50.0)),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(100.0),
@@ -63,6 +100,11 @@ Widget DeviceCard() {
                 ),
               ),
             ),
-          ]).paddingOnly(left: 10, right: 10, top: 12, bottom: 12))
-      .paddingOnly(left: 16, right: 16);
+          ]).paddingOnly(left: 10, right: 10, top: 12, bottom: 12)),
+    );
+  }
 }
+
+// Widget deviceCard() {
+//   return 
+// }
