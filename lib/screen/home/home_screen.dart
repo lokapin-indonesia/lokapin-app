@@ -164,11 +164,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        deviceCard(),
-                        deviceCard(),
-                        deviceCard(),
+                        DeviceCard(),
+                        DeviceCard(),
+                        DeviceCard(),
+                        AppButton(
+                            width: context.width()-30,
+                            height: 90,
+                            shapeBorder: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    color: Colors.black, width: 2.5),
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 0,
+                            onTap: () {},
+                            child: Text(
+                              "+ Add New Pet",
+                              style: boldTextStyle(
+                                  size: 20, weight: FontWeight.bold),
+                            ))
                       ],
-                    )
+                    ).paddingAll(16)
                   ],
                 ))
               ],
