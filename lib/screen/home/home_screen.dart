@@ -19,41 +19,42 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var textFieldController = TextEditingController();
   FocusNode textFocusNode = FocusNode();
-  var sp  = SharedPreferenceHandler();
+  var sp = SharedPreferenceHandler();
 
   String userFullName = "-";
-  String userImage = "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
+  String userImage =
+      "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
 
-  void changeShowName(result){
+  void changeShowName(result) {
     setState(() {
       var name = result["first_name"];
-      if(result['last_name']!=null){
+      if (result['last_name'] != null) {
         name = name + " " + result['last_name'];
       }
       userFullName = name;
     });
   }
 
-  void loadImage(imgurl){
-    if(imgurl!=null){
+  void loadImage(imgurl) {
+    if (imgurl != null) {
       setState(() {
-        userImage = "http://108.136.230.107/static/image/user/"+imgurl;
+        userImage = "http://108.136.230.107/static/image/user/" + imgurl;
       });
     }
   }
 
-  void loadUserInfo() async{
+  void loadUserInfo() async {
     var spInstance = await SharedPreferences.getInstance();
     sp.setSharedPreference(spInstance);
     var session = sp.getToken();
     ProfileApi.getProfile(session).then((value) => {
-      if(value.status == 200){
-        changeShowName(value.data["result"]),
-        loadImage(value.data["result"]["photo"])
-      }
-    });
+          if (value.status == 200)
+            {
+              changeShowName(value.data["result"]),
+              loadImage(value.data["result"]["photo"])
+            }
+        });
   }
-
 
   @override
   void initState() {
@@ -87,82 +88,89 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                25.height,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                Expanded(
+                    child: ListView(
                   children: [
-                    IconButton(
-                        onPressed: () {
-                          const ProfileScreen().launch(context);
-                        },
-                        icon: const Icon(Icons.person))
-                  ],
-                ).paddingRight(16),
-                Container(
-                  margin: EdgeInsets.all(16),
-                  child: Stack(
-                    alignment: Alignment.topCenter,
-                    children: <Widget>[
-                      Container(
-                        width: context.width(),
-                        padding:
-                            EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                        margin: EdgeInsets.only(top: 34.0),
-                        decoration: boxDecorationWithShadow(
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 50,
+                    25.height,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              const ProfileScreen().launch(context);
+                            },
+                            icon: const Icon(Icons.person))
+                      ],
+                    ).paddingRight(16),
+                    Container(
+                      margin: EdgeInsets.all(16),
+                      child: Stack(
+                        alignment: Alignment.topCenter,
+                        children: <Widget>[
+                          Container(
+                            width: context.width(),
+                            padding: EdgeInsets.only(
+                                left: 16, right: 16, bottom: 16),
+                            margin: EdgeInsets.only(top: 34.0),
+                            decoration: boxDecorationWithShadow(
+                                borderRadius: BorderRadius.circular(30)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 50,
+                                      ),
+                                      Text("Hi, " + userFullName,
+                                              style: boldTextStyle(
+                                                  size: 30,
+                                                  weight: FontWeight.w600))
+                                          .center(),
+                                      8.height,
+                                      Text("Your connected device",
+                                              style: boldTextStyle(
+                                                  size: 20,
+                                                  weight: FontWeight.normal))
+                                          .center(),
+                                      8.height,
+                                    ],
                                   ),
-                                  Text("Hi, "+userFullName,
-                                          style: boldTextStyle(
-                                              size: 30,
-                                              weight: FontWeight.w600))
-                                      .center(),
-                                  8.height,
-                                  Text("Your connected device",
-                                          style: boldTextStyle(
-                                              size: 20,
-                                              weight: FontWeight.normal))
-                                      .center(),
-                                  8.height,
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                                )
+                              ],
+                            ),
+                          ),
+                          CircleAvatar(
+                              radius: 35,
+                              backgroundColor: Colors.white,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: ClipOval(
+                                    child: Image.network(userImage,
+                                        width: 140,
+                                        height: 140,
+                                        fit: BoxFit.fitWidth),
+                                  )))
+                        ],
                       ),
-                      CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.white,
-                          child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: ClipOval(
-                                child: Image.network(userImage,
-                                    width: 140,
-                                    height: 140,
-                                    fit: BoxFit.fitWidth),
-                              )))
-                    ],
-                  ),
-                ),
-                Text("Your Devices",
-                        style: boldTextStyle(size: 20, weight: FontWeight.w600))
-                    .paddingAll(16),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DeviceCard(),
-                    DeviceCard(),
-                    DeviceCard(),
+                    ),
+                    Text("Your Devices",
+                            style: boldTextStyle(
+                                size: 20, weight: FontWeight.w600))
+                        .paddingAll(16),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        deviceCard(),
+                        deviceCard(),
+                        deviceCard(),
+                      ],
+                    )
                   ],
-                ),
+                ))
               ],
             ),
           ),

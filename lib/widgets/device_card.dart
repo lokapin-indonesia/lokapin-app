@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-Widget DeviceCard() {
+Widget deviceCard() {
   return Card(
           shape: const RoundedRectangleBorder(
               side: BorderSide(
