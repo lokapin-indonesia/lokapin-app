@@ -37,13 +37,38 @@ class ProfileApi{
     return CustomHttpResponse(response.statusCode, response.body, blankResp);
   }
 
-  static Future<CustomHttpResponse<Map<String, dynamic>>> editUserRequest({name, phone = null, address=null, age=null}) async{
+  static Future<CustomHttpResponse<Map<String, dynamic>>> replaceUserImage(image) async{
+    var token = await SharedPreferenceHandler.getHandler();
+    var thisHeader = {
+      HttpHeaders.cookieHeader : token.getToken()
+    };
+    var request = await http.MultipartRequest('PATCH',Uri.parse(Constant.URL_BE +"user/profile"));
+    var blankResp = json.decode("{}")as Map<String, dynamic>;
+    print(image);
+    request.headers.addAll(thisHeader);
+    request.files.add(http.MultipartFile(
+        "photo",
+        File(image).readAsBytes().asStream(),
+        File(image).lengthSync()));
+    var sent = await request.send();
+    var response = await http.Response.fromStream(sent);
+    if(sent.statusCode<500){
+      var bodyresp = json.decode(response.body) as Map<String, dynamic>;
+      if(sent.statusCode == 200){
+        return CustomHttpResponse(response.statusCode, bodyresp["message"], bodyresp);
+      }
+      return CustomHttpResponse(response.statusCode, bodyresp["message"], blankResp);
+    }
+    return CustomHttpResponse(response.statusCode, response.body, blankResp);
+  }
+
+  static Future<CustomHttpResponse<Map<String, dynamic>>> editUserRequest({name, phone = null, address=null, age=null, image=null}) async{
     var token = await SharedPreferenceHandler.getHandler();
     var thisHeader = {
       HttpHeaders.cookieHeader : token.getToken()
     };
 
-    var data = {
+    Map<String, String> data = {
       "first_name" :  name,
     };
 
@@ -59,8 +84,21 @@ class ProfileApi{
       data["age"] = age.toString();
     }
 
-    var response = await http.patch(Uri.parse(Constant.URL_BE +"user/profile"), body: data, headers: thisHeader);
+
+
+    var request = await http.MultipartRequest('PATCH',Uri.parse(Constant.URL_BE +"user/profile"));
+    request.headers.addAll(thisHeader);
+    request.fields.addAll(data);
+
     var blankResp = json.decode("{}")as Map<String, dynamic>;
+    if(image!=null){
+      request.files.add(http.MultipartFile(
+          "photo",
+          File(image).readAsBytes().asStream(),
+          File(image).lengthSync()));
+    }
+    var sent = await request.send();
+    var response = await http.Response.fromStream(sent);
     if(response.statusCode<500){
       var bodyresp = json.decode(response.body) as Map<String, dynamic>;
       if(response.statusCode == 201){

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lokapin_app/screen/profile/profile_Screen.dart';
+import 'package:lokapin_app/utils/backends/pets-api.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/widgets/device_card.dart';
 
@@ -25,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String userImage =
       "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
 
+  var petCards = [];
+
   void changeShowName(result) {
     setState(() {
       var name = result["first_name"];
@@ -39,6 +42,31 @@ class _HomeScreenState extends State<HomeScreen> {
     if (imgurl != null) {
       setState(() {
         userImage = "http://108.136.230.107/static/image/user/" + imgurl;
+      });
+    }
+  }
+
+  void loadPets() async {
+    var response = await PetsApi.getMyPets();
+    if(response.status == 200){
+      var resplist = response.data["result"] as List<dynamic>;
+      var arr = [];
+      for(var i=0;i<resplist.length;i++){
+        var singleResp = resplist[i];
+        String gambar = "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
+        String name = singleResp["name"];
+        String age = singleResp["age"].toString();
+        String breed = singleResp["breed"];
+        if(singleResp["photo"] != null){
+          gambar = "http://108.136.230.107/static/image/pet/" + singleResp["photo"];
+        }
+        arr.add(
+            DeviceCard(petName: name,breed: breed,petAge: age,imageUrl: gambar)
+        );
+      }
+
+      setState(() {
+        petCards = arr;
       });
     }
   }
@@ -59,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     loadUserInfo();
+    loadPets();
     super.initState();
   }
 
@@ -163,10 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         .paddingAll(16),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        DeviceCard(),
-                        DeviceCard(),
-                        DeviceCard(),
+                      children: [...petCards,
                         AppButton(
                             width: context.width() - 30,
                             height: 90,

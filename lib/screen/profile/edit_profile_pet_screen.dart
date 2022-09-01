@@ -5,7 +5,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 class EditProfilePetScreen extends StatefulWidget {
   static String tag = '/editprofilepetScreen';
-  
+
   const EditProfilePetScreen({Key? key}) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
   FocusNode vacFocusNode = FocusNode();
   var checkupController = TextEditingController();
   FocusNode checkupFocusNode = FocusNode();
-  
+
   @override
   void initState() {
     super.initState();
@@ -48,7 +48,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,15 +56,15 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            'Edit Profile',
+            'Edit Pet Profile',
             style: boldTextStyle(color: Colors.black38, size: 20),
           ),
           leading: Container(
-          margin: const EdgeInsets.all(8),
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black38,
-          ),
+            margin: const EdgeInsets.all(8),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black38,
+            ),
           ).onTap(() {
             finish(context);
           }),
@@ -83,53 +83,41 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
-                      child: Container(
-                        width: 125.0,
-                        height: 125.0,
-                        alignment: Alignment.center,
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              alignment: Alignment.center,
-                              child: CircleAvatar(
-                                  radius: 60,
-                                  backgroundColor:
-                                      Colors.white,
-                                  child: Padding(
-                                      padding:
-                                          const EdgeInsets
-                                              .all(5),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                            'assets/animal_profpic.png',
-                                            width: 125,
-                                            height: 125,
-                                            fit: BoxFit
-                                                .fitWidth),
-                                      ))),
-                            ),
+                    child: Container(
+                      width: 125.0,
+                      height: 125.0,
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                                radius: 60,
+                                backgroundColor: Colors.white,
+                                child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: ClipOval(
+                                      child: Image.asset(
+                                          'assets/animal_profpic.png',
+                                          width: 125,
+                                          height: 125,
+                                          fit: BoxFit.fitWidth),
+                                    ))),
+                          ),
                           Align(
-                            alignment:
-                                Alignment.bottomRight,
+                            alignment: Alignment.bottomRight,
                             child: FloatingActionButton(
                                 elevation: 0,
-                                backgroundColor:
-                                    transparentColor,
+                                backgroundColor: transparentColor,
                                 child: Ink(
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: Colors
-                                              .black,
-                                          width: 1),
+                                          color: Colors.black, width: 1),
                                       color: Colors.white,
                                       borderRadius:
-                                          BorderRadius
-                                              .circular(
-                                                  50.0)),
+                                          BorderRadius.circular(50.0)),
                                   child: const Padding(
-                                    padding:
-                                        EdgeInsets.all(
-                                            5.0),
+                                    padding: EdgeInsets.all(5.0),
                                     child: Icon(
                                       Icons.edit,
                                       size: 20.0,
@@ -144,18 +132,10 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                     ),
                   ),
                   Text("Pet Profile",
-                    style: boldTextStyle(
-                      size: 22, 
-                      color: primaryColor
-                    )
-                  ),
+                      style: boldTextStyle(size: 22, color: primaryColor)),
                   16.height,
                   Text("ID Number",
-                    style: boldTextStyle(
-                      size: 14,
-                      color: Colors.black38
-                    )
-                  ),
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -170,11 +150,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                   ),
                   16.height,
                   Text("Pet Name",
-                    style: boldTextStyle(
-                      size: 14,
-                      color: Colors.black38
-                    )
-                  ),
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -188,11 +164,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                   ),
                   16.height,
                   Text("Pet Birth",
-                    style: boldTextStyle(
-                      size: 14,
-                      color: Colors.black38
-                    )
-                  ),
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -206,11 +178,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                   ),
                   16.height,
                   Text("Pet Breeds",
-                    style: boldTextStyle(
-                      size: 14,
-                      color: Colors.black38
-                    )
-                  ),
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -224,11 +192,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                   ),
                   16.height,
                   Text("Gender",
-                    style: boldTextStyle(
-                      size: 14,
-                      color: Colors.black38
-                    )
-                  ),
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -242,11 +206,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                   ),
                   16.height,
                   Text("Weight",
-                    style: boldTextStyle(
-                      size: 14,
-                      color: Colors.black38
-                    )
-                  ),
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -261,11 +221,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                   ),
                   48.height,
                   Text("Vacctination Activity",
-                    style: boldTextStyle(
-                      size: 14,
-                      color: Colors.black38
-                    )
-                  ),
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -279,11 +235,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                   ),
                   16.height,
                   Text("Medical Check Up Activity",
-                    style: boldTextStyle(
-                      size: 14,
-                      color: Colors.black38
-                    )
-                  ),
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -297,19 +249,15 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                   ),
                   64.height,
                   AppButton(
-                    text: "Save",
-                    textColor: Colors.white,
-                    color: primaryColor,
-                    shapeBorder: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(15)),
-                    width: context.width(),
-                    onTap: () async {
-                      if (_formKey.currentState!.validate()) {
-                        
-                      }
-                    }
-                  ),
+                      text: "Save",
+                      textColor: Colors.white,
+                      color: primaryColor,
+                      shapeBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      width: context.width(),
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {}
+                      }),
                 ],
               ),
             ),

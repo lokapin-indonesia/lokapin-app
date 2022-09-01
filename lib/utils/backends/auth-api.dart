@@ -61,4 +61,21 @@ class AuthenticationAPI{
     }
     return CustomHttpResponse(response.statusCode, response.body, blankResp);
   }
+
+  static Future<CustomHttpResponse<Map<String, dynamic>>> logoutApi() async{
+    var token = await SharedPreferenceHandler.getHandler();
+    var thisHeader = {
+      HttpHeaders.cookieHeader : token.getToken()
+    };
+    var response = await http.post(Uri.parse(Constant.URL_BE +"user/logout"), headers: thisHeader);
+    var blankResp = json.decode("{}")as Map<String, dynamic>;
+    if(response.statusCode<500){
+      var bodyresp = json.decode(response.body) as Map<String, dynamic>;
+      if(response.statusCode == 200){
+        return CustomHttpResponse(response.statusCode, bodyresp["message"], bodyresp);
+      }
+      return CustomHttpResponse(response.statusCode, bodyresp["message"], blankResp);
+    }
+    return CustomHttpResponse(response.statusCode, response.body, blankResp);
+  }
 }

@@ -3,8 +3,12 @@ import 'package:nb_utils/nb_utils.dart';
 
 class DeviceCard extends StatefulWidget {
   static String tag = '/DeviceCard';
+  String? imageUrl = "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
+  String? petName = "";
+  String? breed = "";
+  String? petAge = "";
 
-  DeviceCard({Key? key}) : super(key: key);
+  DeviceCard({Key? key, this.imageUrl, this.petName, this.breed, this.petAge}) : super(key: key);
 
   @override
   _DeviceCardState createState() => _DeviceCardState();
@@ -58,7 +62,7 @@ class _DeviceCardState extends State<DeviceCard> {
                   child: Padding(
                       padding: const EdgeInsets.all(2.5),
                       child: ClipOval(
-                        child: Image.asset('assets/animal_profpic.png',
+                        child: Image.network(widget.imageUrl!,
                             width: 130, height: 130, fit: BoxFit.fitWidth),
                       ))),
             ),
@@ -68,14 +72,14 @@ class _DeviceCardState extends State<DeviceCard> {
                 Row(
                   children: [
                     Text(
-                      "Choky",
+                      widget.petName!,
                       style: boldTextStyle(size: 20),
                     )
                   ],
                 ),
-                const Text("Buldog, 2 years old",
+                Text(widget.breed!+", "+widget.petAge!+" years old",
                     style: TextStyle(color: Colors.grey)),
-                const Text("1.2 km around here",
+                Text("1.2 km around here",
                     style: TextStyle(color: Colors.grey))
               ],
             ),
