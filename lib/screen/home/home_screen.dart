@@ -5,6 +5,7 @@ import 'package:lokapin_app/screen/profile/profile_Screen.dart';
 import 'package:lokapin_app/utils/backends/pets-api.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/widgets/device_card.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/backends/profile-api.dart';
 import '../../utils/sharedpref/sp-handler.dart';
@@ -26,6 +27,24 @@ class _HomeScreenState extends State<HomeScreen> {
   String userFullName = "-";
   String userImage =
       "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  void _onRefresh() async {
+    // monitor network fetch
+    // await Future.delayed(Duration(milliseconds: 1000));
+    loadUserInfo();
+    loadPets();
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    // await Future.delayed(Duration(milliseconds: 1000));
+    if (mounted) setState(() {});
+    _refreshController.loadComplete();
+  }
 
   var petCards = [];
 
@@ -112,115 +131,132 @@ class _HomeScreenState extends State<HomeScreen> {
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           // bottomNavigationBar: const NavBar(),
-          body: Container(
-            width: context.width(),
-            height: context.height(),
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/bg_home.png'),
-                    fit: BoxFit.contain,
-                    alignment: Alignment.topCenter)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          body: SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: true,
+            header: WaterDropHeader(),
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            onLoading: _onLoading,
+            child: ListView(
               children: [
-                Expanded(
-                    child: ListView(
-                  children: [
-                    25.height,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              const ProfileScreen().launch(context);
-                            },
-                            icon: const Icon(Icons.person))
-                      ],
-                    ).paddingRight(16),
-                    Container(
-                      margin: EdgeInsets.all(16),
-                      child: Stack(
-                        alignment: Alignment.topCenter,
-                        children: <Widget>[
-                          Container(
-                            width: context.width(),
-                            padding: EdgeInsets.only(
-                                left: 16, right: 16, bottom: 16),
-                            margin: EdgeInsets.only(top: 34.0),
-                            decoration: boxDecorationWithShadow(
-                                borderRadius: BorderRadius.circular(30)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 50,
-                                      ),
-                                      Text("Hi, " + userFullName,
-                                              style: boldTextStyle(
-                                                  size: 30,
-                                                  weight: FontWeight.w600))
-                                          .center(),
-                                      8.height,
-                                      Text("Your connected device",
-                                              style: boldTextStyle(
-                                                  size: 20,
-                                                  weight: FontWeight.normal))
-                                          .center(),
-                                      8.height,
-                                    ],
+                Container(
+                  width: context.width(),
+                  height: context.height(),
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/bg_home.png'),
+                          fit: BoxFit.contain,
+                          alignment: Alignment.topCenter)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      25.height,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileScreen(),
                                   ),
                                 )
-                              ],
-                            ),
-                          ),
-                          CircleAvatar(
-                              radius: 35,
-                              backgroundColor: Colors.white,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: ClipOval(
-                                    child: Image.network(userImage,
-                                        width: 140,
-                                        height: 140,
-                                        fit: BoxFit.fitWidth),
-                                  )))
+                                    .then((_) {
+                                  // Call setState() here or handle this appropriately
+                                });
+
+                                // const ProfileScreen().launch(context);
+                              },
+                              icon: const Icon(Icons.person))
                         ],
+                      ).paddingRight(16),
+                      Container(
+                        margin: EdgeInsets.all(16),
+                        child: Stack(
+                          alignment: Alignment.topCenter,
+                          children: <Widget>[
+                            Container(
+                              width: context.width(),
+                              padding: EdgeInsets.only(
+                                  left: 16, right: 16, bottom: 16),
+                              margin: EdgeInsets.only(top: 34.0),
+                              decoration: boxDecorationWithShadow(
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: 50,
+                                        ),
+                                        Text("Hi, " + userFullName,
+                                                style: boldTextStyle(
+                                                    size: 30,
+                                                    weight: FontWeight.w600))
+                                            .center(),
+                                        8.height,
+                                        Text("Your connected device",
+                                                style: boldTextStyle(
+                                                    size: 20,
+                                                    weight: FontWeight.normal))
+                                            .center(),
+                                        8.height,
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            CircleAvatar(
+                                radius: 35,
+                                backgroundColor: Colors.white,
+                                child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: ClipOval(
+                                      child: Image.network(userImage,
+                                          width: 140,
+                                          height: 140,
+                                          fit: BoxFit.fitWidth),
+                                    )))
+                          ],
+                        ),
                       ),
-                    ),
-                    Text("Your Devices",
-                            style: boldTextStyle(
-                                size: 20, weight: FontWeight.w600))
-                        .paddingAll(16),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ...petCards,
-                        AppButton(
-                            width: context.width() - 30,
-                            height: 90,
-                            shapeBorder: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                    color: Colors.black, width: 2.5),
-                                borderRadius: BorderRadius.circular(10)),
-                            elevation: 0,
-                            onTap: () {
-                              const AddProfilePetScreen().launch(context);
-                            },
-                            child: Text(
-                              "+ Add New Pet",
+                      Text("Your Devices",
                               style: boldTextStyle(
-                                  size: 20, weight: FontWeight.bold),
-                            ))
-                      ],
-                    ).paddingAll(16)
-                  ],
-                ))
+                                  size: 20, weight: FontWeight.w600))
+                          .paddingAll(16),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ...petCards,
+                          AppButton(
+                              width: context.width() - 30,
+                              height: 90,
+                              shapeBorder: RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                      color: Colors.black, width: 2.5),
+                                  borderRadius: BorderRadius.circular(10)),
+                              elevation: 0,
+                              onTap: () {
+                                const AddProfilePetScreen().launch(context);
+                              },
+                              child: Text(
+                                "+ Add New Pet",
+                                style: boldTextStyle(
+                                    size: 20, weight: FontWeight.bold),
+                              ))
+                        ],
+                      ).paddingAll(16)
+                    ],
+                  ),
+                )
               ],
             ),
           ),

@@ -10,6 +10,7 @@ import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/widgets/pet_card.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/widgets/device_card.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/backends/pets-api.dart';
 import '../../utils/backends/profile-api.dart';
@@ -35,6 +36,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String userAddress = "-";
   String userImage =
       "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
+
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  void _onRefresh() async {
+    // monitor network fetch
+    // await Future.delayed(Duration(milliseconds: 1000));
+    loadUserInfo();
+    loadPets();
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    // await Future.delayed(Duration(milliseconds: 1000));
+    if (mounted) setState(() {});
+    _refreshController.loadComplete();
+  }
 
   var petList = [];
   void logout() {
@@ -153,187 +173,207 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ).onTap(() {
               // Navigator.pop(context);
-              finish(context);
+              pop(context);
             }),
             centerTitle: true,
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.light,
           ),
           backgroundColor: Colors.white,
-          body: ListView(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.all(16),
-                    child: Stack(
-                      alignment: Alignment.topCenter,
-                      children: <Widget>[
-                        Container(
-                          width: context.width(),
-                          padding: EdgeInsets.all(16),
-                          decoration: boxDecorationWithShadow(
-                              backgroundColor: primaryColor,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      flex: 7,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
+          body: SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: true,
+              header: WaterDropHeader(),
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              onLoading: _onLoading,
+              child: ListView(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(16),
+                        child: Stack(
+                          alignment: Alignment.topCenter,
+                          children: <Widget>[
+                            Container(
+                              width: context.width(),
+                              padding: EdgeInsets.all(16),
+                              decoration: boxDecorationWithShadow(
+                                  backgroundColor: primaryColor,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          flex: 7,
+                                          child: Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.end,
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Text(userFullName,
-                                                  style: boldTextStyle(
-                                                      size: 30,
-                                                      weight: FontWeight.w700)),
-                                              8.width
-                                            ],
-                                          ),
-                                          Text(userAge + " years old",
-                                              style: boldTextStyle(
-                                                  size: 17,
-                                                  weight: FontWeight.w300)),
-                                          Text(userPhone,
-                                              style: boldTextStyle(
-                                                  size: 16,
-                                                  weight: FontWeight.normal)),
-                                          20.height,
-                                          Text("Address",
-                                              style: boldTextStyle(
-                                                  size: 20,
-                                                  weight: FontWeight.normal)),
-                                          Text(userAddress,
-                                              style: boldTextStyle(
-                                                  size: 14,
-                                                  weight: FontWeight.w300))
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              width: 150.0,
-                                              height: 150.0,
-                                              child: Stack(
-                                                children: <Widget>[
-                                                  Container(
-                                                    alignment: Alignment.center,
-                                                    child: CircleAvatar(
-                                                        radius: 50,
-                                                        backgroundColor:
-                                                            Colors.white,
-                                                        child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(5),
-                                                            child: ClipOval(
-                                                              child: Image.network(
-                                                                  userImage,
-                                                                  width: 200,
-                                                                  height: 200,
-                                                                  fit: BoxFit
-                                                                      .fitWidth),
-                                                            ))),
-                                                  ),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.bottomRight,
-                                                    child: FloatingActionButton(
-                                                        elevation: 0,
-                                                        backgroundColor:
-                                                            transparentColor,
-                                                        child: Ink(
-                                                          decoration: BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  width: 1),
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          50.0)),
-                                                          child: const Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    5.0),
-                                                            child: Icon(
-                                                              Icons.edit,
-                                                              size: 20.0,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        onPressed: () {
-                                                          const EditProfileScreen()
-                                                              .launch(context);
-                                                        }),
-                                                  )
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(userFullName,
+                                                      style: boldTextStyle(
+                                                          size: 30,
+                                                          weight:
+                                                              FontWeight.w700)),
+                                                  8.width
                                                 ],
                                               ),
-                                            ),
-                                          ]),
+                                              Text(userAge + " years old",
+                                                  style: boldTextStyle(
+                                                      size: 17,
+                                                      weight: FontWeight.w300)),
+                                              Text(userPhone,
+                                                  style: boldTextStyle(
+                                                      size: 16,
+                                                      weight:
+                                                          FontWeight.normal)),
+                                              20.height,
+                                              Text("Address",
+                                                  style: boldTextStyle(
+                                                      size: 20,
+                                                      weight:
+                                                          FontWeight.normal)),
+                                              Text(userAddress,
+                                                  style: boldTextStyle(
+                                                      size: 14,
+                                                      weight: FontWeight.w300))
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  width: 150.0,
+                                                  height: 150.0,
+                                                  child: Stack(
+                                                    children: <Widget>[
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: CircleAvatar(
+                                                            radius: 50,
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(5),
+                                                                child: ClipOval(
+                                                                  child: Image.network(
+                                                                      userImage,
+                                                                      width:
+                                                                          200,
+                                                                      height:
+                                                                          200,
+                                                                      fit: BoxFit
+                                                                          .fitWidth),
+                                                                ))),
+                                                      ),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .bottomRight,
+                                                        child:
+                                                            FloatingActionButton(
+                                                                elevation: 0,
+                                                                backgroundColor:
+                                                                    transparentColor,
+                                                                child: Ink(
+                                                                  decoration: BoxDecoration(
+                                                                      border: Border.all(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          width:
+                                                                              1),
+                                                                      color: Colors
+                                                                          .white,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              50.0)),
+                                                                  child:
+                                                                      const Padding(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            5.0),
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .edit,
+                                                                      size:
+                                                                          20.0,
+                                                                      color: Colors
+                                                                          .black,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                onPressed: () {
+                                                                  const EditProfileScreen()
+                                                                      .launch(
+                                                                          context);
+                                                                }),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  GridView.count(
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 20,
-                    children: [...petList],
-                  ),
-                  64.height,
-                  AppButton(
-                      text: "Add New",
-                      textColor: Colors.white,
-                      color: primaryColor,
-                      shapeBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      width: context.width(),
-                      onTap: () async {
-                        const AddProfilePetScreen().launch(context);
-                      }).paddingSymmetric(vertical: 10, horizontal: 20),
-                  AppButton(
-                      text: "Log out",
-                      textColor: Colors.red,
-                      color: white,
-                      shapeBorder: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.circular(15)),
-                      width: context.width(),
-                      onTap: () async {
-                        logout();
-                      }).paddingSymmetric(vertical: 10, horizontal: 20)
+                      ),
+                      GridView.count(
+                        physics: const ScrollPhysics(),
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 20,
+                        children: [...petList],
+                      ),
+                      64.height,
+                      AppButton(
+                          text: "Add New",
+                          textColor: Colors.white,
+                          color: primaryColor,
+                          shapeBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          width: context.width(),
+                          onTap: () async {
+                            const AddProfilePetScreen().launch(context);
+                          }).paddingSymmetric(vertical: 10, horizontal: 20),
+                      AppButton(
+                          text: "Log out",
+                          textColor: Colors.red,
+                          color: white,
+                          shapeBorder: RoundedRectangleBorder(
+                              side: BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(15)),
+                          width: context.width(),
+                          onTap: () async {
+                            logout();
+                          }).paddingSymmetric(vertical: 10, horizontal: 20)
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
+              )),
         ));
   }
 }

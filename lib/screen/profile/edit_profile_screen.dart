@@ -270,8 +270,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             width: context.width(),
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
-                                print("checkk");
-                                print(newImage);
                                 ProfileApi.editUserRequest(
                                         username:
                                             fullnameController.text.toString(),

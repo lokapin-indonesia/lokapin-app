@@ -45,6 +45,7 @@ dependencies:
   geolocator: ^8.0.0
   shared_preferences:
   cached_network_image:
+  pull_to_refresh: ^2.0.0
 
 dev_dependencies:
   flutter_test:
