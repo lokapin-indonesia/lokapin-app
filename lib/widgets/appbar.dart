@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lokapin_app/screen/construction_screen.dart';
-import 'package:lokapin_app/screen/profile/add_profile_pet_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/screen/home/home_screen.dart';
 
@@ -19,11 +18,11 @@ class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    MapScreen(),
-    ConstructionScreen(),
-    ConstructionScreen(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const HomeScreen(),
+    MapScreen(petId: ""),
+    const ConstructionScreen(),
+    const ConstructionScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -37,7 +36,7 @@ class _NavBarState extends State<NavBar> {
     return Scaffold(
         body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(10), topLeft: Radius.circular(10)),
             boxShadow: [

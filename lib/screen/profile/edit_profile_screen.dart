@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,7 +36,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String userAddress = "-";
   String userImage =
       "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
-  String? newImage = null;
+  File? newImage = null;
 
   void changeShowName(result) {
     setState(() {
@@ -97,10 +99,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         });
         return;
       }
-      print("cuyyy");
-      ProfileApi.replaceUserImage(image.path).then((value) => {
-            if (value.status == 200) {print("cikurrr"), print(value.data)}
-          });
+      setState(() {
+        newImage = File(image.path);
+      });
+      // ProfileApi.replaceUserImage(image.path)
+      //     .then((value) => {if (value.status == 200) {}});
     } on PlatformException catch (e) {
       showErrorAlertDialog(context, "Fail select image", '', () {
         Navigator.pop(context);
@@ -267,14 +270,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             width: context.width(),
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
+                                print("checkk");
+                                print(newImage);
                                 ProfileApi.editUserRequest(
-                                        name:
+                                        username:
                                             fullnameController.text.toString(),
                                         phone: phoneController.text.toString(),
                                         age: ageController.text.toString(),
                                         address:
                                             addressController.text.toString(),
-                                        image: newImage)
+                                        photo: newImage)
                                     .then((value) => {
                                           if (value.status == 200)
                                             {

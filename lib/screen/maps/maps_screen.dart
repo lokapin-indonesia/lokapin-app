@@ -1,8 +1,6 @@
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lokapin_app/models/PetModels.dart';
@@ -11,9 +9,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../utils/backends/pets-api.dart';
 
 class MapScreen extends StatefulWidget {
-  static String tag = '/MapScreen';
-
-  const MapScreen({Key? key}) : super(key: key);
+  String? petId = "";
+  // ignore: use_key_in_widget_constructors
+  MapScreen({
+    Key? key,
+    this.petId,
+  }) : super(key: key);
 
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -40,6 +41,41 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       }
     }
     return null;
+  }
+
+  void geolocPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('Location permissions are denied');
+      } else if (permission == LocationPermission.deniedForever) {
+        print("'Location permissions are permanently denied");
+      } else {
+        print("GPS Location service is granted");
+      }
+    } else {
+      print("GPS Location permission granted.");
+    }
+  }
+
+  void loadCurrentLoc({withAnimate = false}) async {
+    geolocPermission();
+    bool servicestatus = await Geolocator.isLocationServiceEnabled();
+
+    if (servicestatus) {
+      print("GPS service is enabled");
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      myLoc = LatLng(position.latitude, position.longitude);
+      if (withAnimate) {
+        _animatedMapMove(myLoc!, 15);
+      }
+      setState(() {});
+    } else {
+      print("GPS service is disabled.");
+    }
   }
 
   void loadPet() async {
@@ -196,10 +232,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                           children: [
                                             Row(
                                               children: [
+                                                
                                                 CircleAvatar(
                                                     radius: 35,
                                                     backgroundColor:
-                                                        Colors.white,
+                                                        Colors.black,
                                                     child: Padding(
                                                         padding:
                                                             const EdgeInsets
@@ -212,6 +249,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                               fit: BoxFit
                                                                   .fitWidth),
                                                         ))),
+                                                        const SizedBox(width: 10),
                                                 Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -307,7 +345,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                             ),
                                           ],
                                         ),
-                                      ),
+                                      ).paddingAll(3),
                                     ],
                                   ),
                                 ),
@@ -325,7 +363,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     this.loadPet();
+    this.loadCurrentLoc(withAnimate: true);
     super.initState();
+    print("pet id: " + widget.petId!);
     mapController = MapController();
   }
 

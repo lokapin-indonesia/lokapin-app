@@ -49,21 +49,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void loadPets() async {
     var response = await PetsApi.getMyPets();
-    if(response.status == 200){
+    if (response.status == 200) {
       var resplist = response.data["result"] as List<dynamic>;
       var arr = [];
-      for(var i=0;i<resplist.length;i++){
+      for (var i = 0; i < resplist.length; i++) {
         var singleResp = resplist[i];
-        String gambar = "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
+        String gambar =
+            "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
         String name = singleResp["name"];
+        String id = singleResp["id"].toString();
         String age = singleResp["age"].toString();
         String breed = singleResp["breed"];
-        if(singleResp["photo"] != null){
-          gambar = "http://108.136.230.107/static/image/pet/" + singleResp["photo"];
+        if (singleResp["photo"] != null) {
+          gambar =
+              "http://108.136.230.107/static/image/pet/" + singleResp["photo"];
         }
-        arr.add(
-            DeviceCard(petName: name,breed: breed,petAge: age,imageUrl: gambar)
-        );
+        arr.add(DeviceCard(
+            petName: name,
+            petId: id,
+            breed: breed,
+            petAge: age,
+            imageUrl: gambar));
       }
 
       setState(() {
@@ -193,7 +199,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         .paddingAll(16),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [...petCards,
+                      children: [
+                        ...petCards,
                         AppButton(
                             width: context.width() - 30,
                             height: 90,
