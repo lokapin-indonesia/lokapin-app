@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const HomeScreen()));
+                                                          const NavBar()));
                                             } else {
                                               showErrorAlertDialog(
                                                   context,

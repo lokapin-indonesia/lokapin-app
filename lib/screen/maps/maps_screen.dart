@@ -189,7 +189,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 ])
               ],
             ),
-
             Positioned(
                 left: 0,
                 right: 0,
@@ -220,7 +219,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            color: const Color.fromARGB(255, 30, 29, 29),
+                            color: Colors.white,
                             child: Row(
                               children: [
                                 const SizedBox(width: 10),
@@ -234,38 +233,122 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              'asdfasdf',
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                            Row(
+                                              children: [
+                                                CircleAvatar(
+                                                    radius: 35,
+                                                    backgroundColor:
+                                                        Colors.black,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8),
+                                                        child: ClipOval(
+                                                          child: Image.network(
+                                                              photoToShow,
+                                                              width: 70,
+                                                              height: 70,
+                                                              fit: BoxFit
+                                                                  .fitWidth),
+                                                        ))),
+                                                const SizedBox(width: 10),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      petData['name'] +
+                                                          " is near from home",
+                                                      style: boldTextStyle(
+                                                          size: 17,
+                                                          color: const Color
+                                                                  .fromRGBO(
+                                                              31, 30, 34, 0.7)),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Distance : 2.0 km / ",
+                                                          style: TextStyle(
+                                                              fontSize: 17,
+                                                              color: const Color
+                                                                      .fromRGBO(
+                                                                  31,
+                                                                  30,
+                                                                  34,
+                                                                  0.7)),
+                                                        ),
+                                                        Text("2 km",
+                                                            style: boldTextStyle(
+                                                                size: 15,
+                                                                color: const Color
+                                                                        .fromRGBO(
+                                                                    31,
+                                                                    30,
+                                                                    34,
+                                                                    0.7)))
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                              ],
                                             ),
-                                            const SizedBox(height: 10),
+                                            10.height,
                                             Text(
-                                              'caikala',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey,
-                                              ),
+                                                petData['name'] +
+                                                    " is running at",
+                                                style: boldTextStyle(
+                                                    size: 18,
+                                                    color: const Color.fromRGBO(
+                                                        31, 30, 34, 0.7))),
+                                            const Text(
+                                              "Jl. Gubeng Kertajaya VI A No.46, Kertajaya, Kec. Gubeng, Kota SBY, Jawa Timur 60282",
+                                              style: TextStyle(
+                                                  color: const Color.fromRGBO(
+                                                      31, 30, 34, 0.7),
+                                                  fontSize: 12),
+                                            ),
+                                            30.height,
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                AppButton(
+                                                    width: 140,
+                                                    color: Color(0xFFFCE76C),
+                                                    shapeBorder:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                    elevation: 0,
+                                                    onTap: () {},
+                                                    child: Text(
+                                                        "Virtual Pet Zone")),
+                                                AppButton(
+                                                    width: 140,
+                                                    color: Color(0xFF1F1E22),
+                                                    shapeBorder:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                    elevation: 0,
+                                                    onTap: () {},
+                                                    child: Text(
+                                                      "Find Your Pet",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ))
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ),
+                                      ).paddingAll(3),
                                     ],
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.asset(
-                                        '',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -294,7 +377,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     timer?.cancel();
     super.dispose();
   }
