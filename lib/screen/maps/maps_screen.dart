@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:lokapin_app/models/PetModels.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils/backends/pets-api.dart';
@@ -21,8 +22,9 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
-  String mapBoxAccessToken = "pk.eyJ1IjoiaGFmaWRhYmkiLCJhIjoiY2tuNXZ2N25uMDg1MjJyczlna3VndmFmNSJ9.VKoc34AfkqZ5uUUODIUBVA";
+class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
+  String mapBoxAccessToken =
+      "pk.eyJ1IjoiaGFmaWRhYmkiLCJhIjoiY2tuNXZ2N25uMDg1MjJyczlna3VndmFmNSJ9.VKoc34AfkqZ5uUUODIUBVA";
   String mapBoxStyleId = "cl7jeeyo2000114prif1sze3r";
   LatLng? myLoc = LatLng(-7.283760773479516, 112.79506478349177);
   var selectedLoc = LatLng(-7.283760773479516, 112.79506478349177);
@@ -35,9 +37,9 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
   var petData = [];
   Timer? timer;
 
-  dynamic getPetData(id){
-    for(var i=0;i<petData.length;i++){
-      if(petData[i]["id"] == id){
+  dynamic getPetData(id) {
+    for (var i = 0; i < petData.length; i++) {
+      if (petData[i]["id"] == id) {
         return petData[i];
       }
     }
@@ -51,12 +53,12 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         print('Location permissions are denied');
-      }else if(permission == LocationPermission.deniedForever){
+      } else if (permission == LocationPermission.deniedForever) {
         print("'Location permissions are permanently denied");
-      }else{
+      } else {
         print("GPS Location service is granted");
       }
-    }else{
+    } else {
       print("GPS Location permission granted.");
     }
   }
@@ -65,43 +67,47 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
     geolocPermission();
     bool servicestatus = await Geolocator.isLocationServiceEnabled();
 
-    if(servicestatus){
+    if (servicestatus) {
       print("GPS service is enabled");
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
       myLoc = LatLng(position.latitude, position.longitude);
-      if(withAnimate){
+      if (withAnimate) {
         _animatedMapMove(myLoc!, 15);
       }
       setState(() {});
-    }else{
+    } else {
       print("GPS service is disabled.");
     }
   }
 
-  void loadPet() async{
+  void loadPet() async {
     var response = await PetsApi.getMyPets();
-    if(response.status == 200){
+    if (response.status == 200) {
       var resplist = response.data["result"] as List<dynamic>;
       var arr = [];
       var pdata = [];
-      for(var i=0;i<resplist.length;i++){
+      for (var i = 0; i < resplist.length; i++) {
         var singleResp = resplist[i];
-        if(singleResp["lat"]!=null && singleResp["long"] != null && singleResp["last_ping"] != null){
+        if (singleResp["lat"] != null &&
+            singleResp["long"] != null &&
+            singleResp["last_ping"] != null) {
           DateTime? lastPing = DateTime.tryParse(singleResp["last_ping"]);
           singleResp["connected"] = false;
 
-          if(lastPing!= null && lastPing.isToday){
+          if (lastPing != null && lastPing.isToday) {
             singleResp["connected"] = true;
           }
 
           pdata.add(singleResp);
-          var latlong = LatLng(double.parse(singleResp["lat"]), double.parse(singleResp["long"]));
+          var latlong = LatLng(double.parse(singleResp["lat"]),
+              double.parse(singleResp["long"]));
           arr.add(Marker(
               point: latlong,
               height: 40,
               width: 40,
-              builder: markerBuilder(true, singleResp["id"], singleResp["connected"])
-          ));
+              builder: markerBuilder(
+                  true, singleResp["id"], singleResp["connected"])));
         }
       }
 
@@ -112,11 +118,11 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
     }
   }
 
-  dynamic markerBuilder(bool isPet, int? currIdx, bool isConnected){
-    GestureDetector _markerBuilder(_){
+  dynamic markerBuilder(bool isPet, int? currIdx, bool isConnected) {
+    GestureDetector _markerBuilder(_) {
       return GestureDetector(
-          onTap: (){
-            if(currIdx!= null){
+          onTap: () {
+            if (currIdx != null) {
               pageController.animateToPage(
                 currIdx,
                 duration: const Duration(milliseconds: 500),
@@ -124,7 +130,8 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
               );
               selectedIndex = currIdx;
               var petData = getPetData(currIdx);
-              selectedLoc = LatLng(double.parse(petData["lat"]), double.parse(petData["long"]));
+              selectedLoc = LatLng(
+                  double.parse(petData["lat"]), double.parse(petData["long"]));
               _isCardVisible = true;
               _animatedMapMove(selectedLoc, 16.5);
               setState(() {});
@@ -135,14 +142,16 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
             scale: isPet ? (selectedIndex == currIdx ? 1 : 0.7) : 1,
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 500),
-              opacity: isConnected ? (isPet ? (selectedIndex == currIdx ? 1 : 0.5) : 1) : 0.65,
+              opacity: isConnected
+                  ? (isPet ? (selectedIndex == currIdx ? 1 : 0.5) : 1)
+                  : 0.65,
               child: SvgPicture.asset(
                 isPet ? 'assets/map_marker.svg' : 'assets/map_marker_user.svg',
               ),
             ),
-          )
-      );
+          ));
     }
+
     return _markerBuilder;
   }
 
@@ -159,32 +168,25 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
           children: [
             FlutterMap(
               mapController: mapController,
-              options: MapOptions(
-                minZoom: 10,
-                maxZoom: 25,
-                zoom: 15,
-                center: myLoc
-              ),
+              options:
+                  MapOptions(minZoom: 10, maxZoom: 25, zoom: 15, center: myLoc),
               layers: [
                 TileLayerOptions(
                   urlTemplate:
-                  "https://api.mapbox.com/styles/v1/hafidabi/{mapStyleId}/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}",
+                      "https://api.mapbox.com/styles/v1/hafidabi/{mapStyleId}/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}",
                   additionalOptions: {
                     'mapStyleId': mapBoxStyleId,
                     'accessToken': mapBoxAccessToken,
                   },
                 ),
-                MarkerLayerOptions(
-                  markers: [
-                    ...petMarker,
-                    Marker(
+                MarkerLayerOptions(markers: [
+                  ...petMarker,
+                  Marker(
                       point: myLoc!,
                       height: 40,
                       width: 40,
-                      builder: markerBuilder(false, null, true)
-                    ),
-                  ]
-                )
+                      builder: markerBuilder(false, null, true)),
+                ])
               ],
             ),
 
@@ -192,15 +194,25 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
                 left: 0,
                 right: 0,
                 bottom: 2,
-                height: MediaQuery.of(context).size.height * (_isCardVisible ? 0.3 : 0),
+                height: MediaQuery.of(context).size.height *
+                    (_isCardVisible ? 0.3 : 0),
                 child: PageView.builder(
                     controller: pageController,
-                    onPageChanged: (val){
+                    onPageChanged: (val) {
                       selectedIndex = val;
                       _animatedMapMove(selectedLoc, 16.5);
                       setState(() {});
                     },
-                    itemBuilder: (_, index){
+                    itemBuilder: (_, index) {
+                      final petData = getPetData(selectedIndex);
+                      var photoToShow;
+                      if (petData['photo'] != null) {
+                        photoToShow =
+                            "http://108.136.230.107/static/image/pet/" +
+                                petData['photo'];
+                      } else {
+                        photoToShow = "assets/animal_profpic.png";
+                      }
                       return Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Card(
@@ -219,7 +231,8 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
                                       Expanded(
                                         flex: 2,
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'asdfasdf',
@@ -258,10 +271,8 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
                                 const SizedBox(width: 10),
                               ],
                             ),
-                          )
-                      );
-                    })
-            )
+                          ));
+                    }))
           ],
         ),
       ),
@@ -303,7 +314,7 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
     // The animation determines what path the animation will take. You can try different Curves values, although I found
     // fastOutSlowIn to be my favorite.
     Animation<double> animation =
-    CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
 
     controller.addListener(() {
       mapController.move(
@@ -322,5 +333,4 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
 
     controller.forward();
   }
-
 }
