@@ -5,21 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:lokapin_app/models/PetModels.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils/backends/pets-api.dart';
 
-class MapScreen extends StatefulWidget{
+class MapScreen extends StatefulWidget {
   static String tag = '/MapScreen';
 
   const MapScreen({Key? key}) : super(key: key);
 
   @override
-  _MapScreenState createState()=> _MapScreenState();
+  _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
-  String mapBoxAccessToken = "pk.eyJ1IjoiaGFmaWRhYmkiLCJhIjoiY2tuNXZ2N25uMDg1MjJyczlna3VndmFmNSJ9.VKoc34AfkqZ5uUUODIUBVA";
+class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
+  String mapBoxAccessToken =
+      "pk.eyJ1IjoiaGFmaWRhYmkiLCJhIjoiY2tuNXZ2N25uMDg1MjJyczlna3VndmFmNSJ9.VKoc34AfkqZ5uUUODIUBVA";
   String mapBoxStyleId = "cl7jeeyo2000114prif1sze3r";
   LatLng? myLoc = LatLng(-7.283760773479516, 112.79506478349177);
   var selectedLoc = LatLng(-7.283760773479516, 112.79506478349177);
@@ -31,39 +33,42 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
   var petMarker = [];
   var petData = [];
 
-  dynamic getPetData(id){
-    for(var i=0;i<petData.length;i++){
-      if(petData[i]["id"] == id){
+  dynamic getPetData(id) {
+    for (var i = 0; i < petData.length; i++) {
+      if (petData[i]["id"] == id) {
         return petData[i];
       }
     }
     return null;
   }
 
-  void loadPet() async{
+  void loadPet() async {
     var response = await PetsApi.getMyPets();
-    if(response.status == 200){
+    if (response.status == 200) {
       var resplist = response.data["result"] as List<dynamic>;
       var arr = [];
       var pdata = [];
-      for(var i=0;i<resplist.length;i++){
+      for (var i = 0; i < resplist.length; i++) {
         var singleResp = resplist[i];
-        if(singleResp["lat"]!=null && singleResp["long"] != null && singleResp["last_ping"] != null){
+        if (singleResp["lat"] != null &&
+            singleResp["long"] != null &&
+            singleResp["last_ping"] != null) {
           DateTime? lastPing = DateTime.tryParse(singleResp["last_ping"]);
           singleResp["connected"] = false;
 
-          if(lastPing!= null && lastPing.isToday){
+          if (lastPing != null && lastPing.isToday) {
             singleResp["connected"] = true;
           }
 
           pdata.add(singleResp);
-          var latlong = LatLng(double.parse(singleResp["lat"]), double.parse(singleResp["long"]));
+          var latlong = LatLng(double.parse(singleResp["lat"]),
+              double.parse(singleResp["long"]));
           arr.add(Marker(
               point: latlong,
               height: 40,
               width: 40,
-              builder: markerBuilder(true, singleResp["id"], singleResp["connected"])
-          ));
+              builder: markerBuilder(
+                  true, singleResp["id"], singleResp["connected"])));
         }
       }
 
@@ -74,11 +79,11 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
     }
   }
 
-  dynamic markerBuilder(bool isPet, int? currIdx, bool isConnected){
-    GestureDetector _markerBuilder(_){
+  dynamic markerBuilder(bool isPet, int? currIdx, bool isConnected) {
+    GestureDetector _markerBuilder(_) {
       return GestureDetector(
-          onTap: (){
-            if(currIdx!= null){
+          onTap: () {
+            if (currIdx != null) {
               pageController.animateToPage(
                 currIdx,
                 duration: const Duration(milliseconds: 500),
@@ -86,7 +91,8 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
               );
               selectedIndex = currIdx;
               var petData = getPetData(currIdx);
-              selectedLoc = LatLng(double.parse(petData["lat"]), double.parse(petData["long"]));
+              selectedLoc = LatLng(
+                  double.parse(petData["lat"]), double.parse(petData["long"]));
               _isCardVisible = true;
               _animatedMapMove(selectedLoc, 16.5);
               setState(() {});
@@ -97,14 +103,16 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
             scale: isPet ? (selectedIndex == currIdx ? 1 : 0.7) : 1,
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 500),
-              opacity: isConnected ? (isPet ? (selectedIndex == currIdx ? 1 : 0.5) : 1) : 0.65,
+              opacity: isConnected
+                  ? (isPet ? (selectedIndex == currIdx ? 1 : 0.5) : 1)
+                  : 0.65,
               child: SvgPicture.asset(
                 isPet ? 'assets/map_marker.svg' : 'assets/map_marker_user.svg',
               ),
             ),
-          )
-      );
+          ));
     }
+
     return _markerBuilder;
   }
 
@@ -121,48 +129,50 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
           children: [
             FlutterMap(
               mapController: mapController,
-              options: MapOptions(
-                minZoom: 10,
-                maxZoom: 25,
-                zoom: 15,
-                center: myLoc
-              ),
+              options:
+                  MapOptions(minZoom: 10, maxZoom: 25, zoom: 15, center: myLoc),
               layers: [
                 TileLayerOptions(
                   urlTemplate:
-                  "https://api.mapbox.com/styles/v1/hafidabi/{mapStyleId}/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}",
+                      "https://api.mapbox.com/styles/v1/hafidabi/{mapStyleId}/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}",
                   additionalOptions: {
                     'mapStyleId': mapBoxStyleId,
                     'accessToken': mapBoxAccessToken,
                   },
                 ),
-                MarkerLayerOptions(
-                  markers: [
-                    ...petMarker,
-                    Marker(
+                MarkerLayerOptions(markers: [
+                  ...petMarker,
+                  Marker(
                       point: myLoc!,
                       height: 40,
                       width: 40,
-                      builder: markerBuilder(false, null, true)
-                    ),
-                  ]
-                )
+                      builder: markerBuilder(false, null, true)),
+                ])
               ],
             ),
-
             Positioned(
                 left: 0,
                 right: 0,
                 bottom: 2,
-                height: MediaQuery.of(context).size.height * (_isCardVisible ? 0.3 : 0),
+                height: MediaQuery.of(context).size.height *
+                    (_isCardVisible ? 0.3 : 0),
                 child: PageView.builder(
                     controller: pageController,
-                    onPageChanged: (val){
+                    onPageChanged: (val) {
                       selectedIndex = val;
                       _animatedMapMove(selectedLoc, 16.5);
                       setState(() {});
                     },
-                    itemBuilder: (_, index){
+                    itemBuilder: (_, index) {
+                      final petData = getPetData(selectedIndex);
+                      var photoToShow;
+                      if (petData['photo'] != null) {
+                        photoToShow =
+                            "http://108.136.230.107/static/image/pet/" +
+                                petData['photo'];
+                      } else {
+                        photoToShow = "assets/animal_profpic.png";
+                      }
                       return Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Card(
@@ -170,7 +180,7 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            color: const Color.fromARGB(255, 30, 29, 29),
+                            color: Colors.white,
                             child: Row(
                               children: [
                                 const SizedBox(width: 10),
@@ -181,22 +191,119 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
                                       Expanded(
                                         flex: 2,
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              'asdfasdf',
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                            Row(
+                                              children: [
+                                                CircleAvatar(
+                                                    radius: 35,
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8),
+                                                        child: ClipOval(
+                                                          child: Image.network(
+                                                              photoToShow,
+                                                              width: 70,
+                                                              height: 70,
+                                                              fit: BoxFit
+                                                                  .fitWidth),
+                                                        ))),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      petData['name'] +
+                                                          " is near from home",
+                                                      style: boldTextStyle(
+                                                          size: 17,
+                                                          color: const Color
+                                                                  .fromRGBO(
+                                                              31, 30, 34, 0.7)),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Distance : 2.0 km / ",
+                                                          style: TextStyle(
+                                                              fontSize: 17,
+                                                              color: const Color
+                                                                      .fromRGBO(
+                                                                  31,
+                                                                  30,
+                                                                  34,
+                                                                  0.7)),
+                                                        ),
+                                                        Text("2 km",
+                                                            style: boldTextStyle(
+                                                                size: 15,
+                                                                color: const Color
+                                                                        .fromRGBO(
+                                                                    31,
+                                                                    30,
+                                                                    34,
+                                                                    0.7)))
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                              ],
                                             ),
-                                            const SizedBox(height: 10),
+                                            10.height,
                                             Text(
-                                              'caikala',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey,
-                                              ),
+                                                petData['name'] +
+                                                    " is running at",
+                                                style: boldTextStyle(
+                                                    size: 18,
+                                                    color: const Color.fromRGBO(
+                                                        31, 30, 34, 0.7))),
+                                            const Text(
+                                              "Jl. Gubeng Kertajaya VI A No.46, Kertajaya, Kec. Gubeng, Kota SBY, Jawa Timur 60282",
+                                              style: TextStyle(
+                                                  color: const Color.fromRGBO(
+                                                      31, 30, 34, 0.7),
+                                                  fontSize: 12),
+                                            ),
+                                            30.height,
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                AppButton(
+                                                    width: 140,
+                                                    color: Color(0xFFFCE76C),
+                                                    shapeBorder:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                    elevation: 0,
+                                                    onTap: () {},
+                                                    child: Text(
+                                                        "Virtual Pet Zone")),
+                                                AppButton(
+                                                    width: 140,
+                                                    color: Color(0xFF1F1E22),
+                                                    shapeBorder:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                    elevation: 0,
+                                                    onTap: () {},
+                                                    child: Text(
+                                                      "Find Your Pet",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ))
+                                              ],
                                             ),
                                           ],
                                         ),
@@ -205,25 +312,10 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
                                   ),
                                 ),
                                 const SizedBox(width: 10),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.asset(
-                                        '',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
                               ],
                             ),
-                          )
-                      );
-                    })
-            )
+                          ));
+                    }))
           ],
         ),
       ),
@@ -252,7 +344,7 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
     // The animation determines what path the animation will take. You can try different Curves values, although I found
     // fastOutSlowIn to be my favorite.
     Animation<double> animation =
-    CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
 
     controller.addListener(() {
       mapController.move(
@@ -271,5 +363,4 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
 
     controller.forward();
   }
-
 }
