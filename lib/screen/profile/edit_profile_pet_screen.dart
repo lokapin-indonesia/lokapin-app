@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lokapin_app/utils/backends/pets-api.dart';
 import 'package:lokapin_app/utils/colors.dart';
+import 'package:lokapin_app/widgets/dialog.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class EditProfilePetScreen extends StatefulWidget {
-  static String tag = '/editprofilepetScreen';
+  final String id;
 
-  const EditProfilePetScreen({Key? key}) : super(key: key);
+  const EditProfilePetScreen({required this.id, Key? key}) : super(key: key);
 
   @override
   _EditProfilePetScreenState createState() => _EditProfilePetScreenState();
@@ -18,26 +20,51 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
   FocusNode idFocusNode = FocusNode();
   var nameController = TextEditingController();
   FocusNode nameFocusNode = FocusNode();
-  var birthController = TextEditingController();
-  FocusNode birthFocusNode = FocusNode();
   var breedsController = TextEditingController();
   FocusNode breedsFocusNode = FocusNode();
+  var speciesController = TextEditingController();
+  FocusNode speciesFocusNode = FocusNode();
+  var ageController = TextEditingController();
+  FocusNode ageFocusNode = FocusNode();
   var genderController = TextEditingController();
   FocusNode genderFocusNode = FocusNode();
   var weightController = TextEditingController();
   FocusNode weightFocusNode = FocusNode();
-  var vacController = TextEditingController();
-  FocusNode vacFocusNode = FocusNode();
-  var checkupController = TextEditingController();
-  FocusNode checkupFocusNode = FocusNode();
+
+  Future<void> init() async {
+    PetsApi.getPetProfile(widget.id).then((value) => {
+          setState(() {
+            var petData = value.data["result"];
+            if (petData["id"] != null) {
+              idController.text = petData["id"].toString();
+            }
+            if (petData["name"] != null) {
+              nameController.text = petData["name"];
+            }
+            if (petData["breed"] != null) {
+              breedsController.text = petData["breed"];
+            }
+            if (petData["species"] != null) {
+              speciesController.text = petData["species"];
+            }
+            if (petData["age"] != null) {
+              ageController.text = petData["age"].toString();
+            }
+            if (petData["gender"] != null) {
+              genderController.text = petData["gender"];
+            }
+            if (petData["weight"] != null) {
+              weightController.text = petData["weight"].toString();
+            }
+          }),
+        });
+  }
 
   @override
   void initState() {
     super.initState();
     init();
   }
-
-  Future<void> init() async {}
 
   @override
   void dispose() {
@@ -144,9 +171,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                     ),
                     textFieldType: TextFieldType.OTHER,
                     keyboardType: TextInputType.number,
-                    controller: idController,
-                    focus: idFocusNode,
-                    nextFocus: nameFocusNode,
+                    enabled: false,
                   ),
                   16.height,
                   Text("Pet Name",
@@ -160,20 +185,6 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                     textFieldType: TextFieldType.NAME,
                     controller: nameController,
                     focus: nameFocusNode,
-                    nextFocus: birthFocusNode,
-                  ),
-                  16.height,
-                  Text("Pet Birth",
-                      style: boldTextStyle(size: 14, color: Colors.black38)),
-                  AppTextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.black12,
-                    ),
-                    textFieldType: TextFieldType.OTHER,
-                    controller: birthController,
-                    focus: birthFocusNode,
                     nextFocus: breedsFocusNode,
                   ),
                   16.height,
@@ -188,6 +199,34 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                     textFieldType: TextFieldType.OTHER,
                     controller: breedsController,
                     focus: breedsFocusNode,
+                    nextFocus: speciesFocusNode,
+                  ),
+                  16.height,
+                  Text("Pet Species",
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
+                  AppTextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.black12,
+                    ),
+                    textFieldType: TextFieldType.OTHER,
+                    controller: speciesController,
+                    focus: speciesFocusNode,
+                    nextFocus: ageFocusNode,
+                  ),
+                  16.height,
+                  Text("Pet Age",
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
+                  AppTextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.black12,
+                    ),
+                    textFieldType: TextFieldType.OTHER,
+                    controller: ageController,
+                    focus: ageFocusNode,
                     nextFocus: genderFocusNode,
                   ),
                   16.height,
@@ -215,37 +254,8 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                     ),
                     textFieldType: TextFieldType.OTHER,
                     keyboardType: TextInputType.number,
-                    controller: breedsController,
-                    focus: breedsFocusNode,
-                    nextFocus: genderFocusNode,
-                  ),
-                  48.height,
-                  Text("Vacctination Activity",
-                      style: boldTextStyle(size: 14, color: Colors.black38)),
-                  AppTextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.black12,
-                    ),
-                    textFieldType: TextFieldType.OTHER,
-                    controller: breedsController,
-                    focus: breedsFocusNode,
-                    nextFocus: genderFocusNode,
-                  ),
-                  16.height,
-                  Text("Medical Check Up Activity",
-                      style: boldTextStyle(size: 14, color: Colors.black38)),
-                  AppTextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.black12,
-                    ),
-                    textFieldType: TextFieldType.OTHER,
-                    controller: breedsController,
-                    focus: breedsFocusNode,
-                    nextFocus: genderFocusNode,
+                    controller: weightController,
+                    focus: weightFocusNode,
                   ),
                   64.height,
                   AppButton(
@@ -256,7 +266,35 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                           borderRadius: BorderRadius.circular(15)),
                       width: context.width(),
                       onTap: () async {
-                        if (_formKey.currentState!.validate()) {}
+                        if (_formKey.currentState!.validate()) {
+                          PetsApi.editPetProfile(
+                            pet_id: idController.text.toString(),
+                            name: nameController.text.toString(),
+                            breed: breedsController.text.toString(),
+                            species: speciesController.text.toString(),
+                            age: ageController.text.toString(),
+                            gender: genderController.text.toString(),
+                            weight: weightController.text,
+                          ).then((value) => {
+                                // print("response" + value.data.toString()),
+                                if (value.status == 200)
+                                  {
+                                    showSuccessfulAlertDialog(
+                                        context,
+                                        "Berhasil edit pet profile!",
+                                        "",
+                                        () => Navigator.pop(context))
+                                  }
+                                else
+                                  {
+                                    showErrorAlertDialog(
+                                        context,
+                                        "Gagal edit pet profile!",
+                                        value.message,
+                                        () => Navigator.pop(context))
+                                  }
+                              });
+                        }
                       }),
                 ],
               ),

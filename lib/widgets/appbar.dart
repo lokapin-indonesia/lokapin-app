@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lokapin_app/screen/construction_screen.dart';
-import 'package:lokapin_app/screen/maps/maps_screen.dart';
 import 'package:lokapin_app/screen/profile/add_profile_pet_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/screen/home/home_screen.dart';

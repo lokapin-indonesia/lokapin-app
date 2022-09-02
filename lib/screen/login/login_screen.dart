@@ -142,14 +142,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                             String password = passwordController
                                                 .text
                                                 .toString();
-
-                                            print(email);
-                                            print(password);
-                                            var resp = await AuthenticationAPI.loginRequest(email, password);
-                                            if(resp.status == 200){
-                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>NavBar()));
-                                            }else{
-                                              showErrorAlertDialog(context, "Something wrong happened", resp.message, () => Navigator.pop(context));
+                                            var resp = await AuthenticationAPI
+                                                .loginRequest(email, password);
+                                            if (resp.status == 200) {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const NavBar()));
+                                            } else {
+                                              showErrorAlertDialog(
+                                                  context,
+                                                  "Something wrong happened",
+                                                  json.decode(resp.message)[
+                                                      "message"]["message"],
+                                                  () => Navigator.pop(context));
                                             }
                                           }
                                           // WAEditProfileScreen(isEditProfile: false).launch(context);

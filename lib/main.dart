@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lokapin_app/screen/profile/profile_Screen.dart';
 import 'package:lokapin_app/screen/splash/splash_screen.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';

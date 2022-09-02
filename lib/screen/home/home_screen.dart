@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lokapin_app/screen/profile/add_profile_pet_screen.dart';
 import 'package:lokapin_app/screen/profile/profile_Screen.dart';
 import 'package:lokapin_app/utils/backends/pets-api.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -201,7 +202,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.black, width: 2.5),
                                 borderRadius: BorderRadius.circular(10)),
                             elevation: 0,
-                            onTap: () {},
+                            onTap: () {
+                              const AddProfilePetScreen().launch(context);
+                            },
                             child: Text(
                               "+ Add New Pet",
                               style: boldTextStyle(
