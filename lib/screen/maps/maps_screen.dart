@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:ffi';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,13 +9,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils/backends/pets-api.dart';
 
-class MapScreen extends StatefulWidget{
-  static String tag = '/MapScreen';
-
-  const MapScreen({Key? key}) : super(key: key);
+class MapScreen extends StatefulWidget {
+  String? petId = "";
+  // ignore: use_key_in_widget_constructors
+  MapScreen({
+    Key? key,
+    this.petId,
+  }) : super(key: key);
 
   @override
-  _MapScreenState createState()=> _MapScreenState();
+  _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
@@ -272,6 +273,7 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
     this.loadPet();
     this.loadCurrentLoc(withAnimate: true);
     super.initState();
+    print("pet id: " + widget.petId!);
     mapController = MapController();
 
     timer = Timer.periodic(Duration(seconds: 5), (timer) {

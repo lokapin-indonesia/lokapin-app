@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lokapin_app/screen/maps/maps_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DeviceCard extends StatefulWidget {
@@ -6,10 +7,17 @@ class DeviceCard extends StatefulWidget {
   String? imageUrl =
       "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
   String? petName = "";
+  String? petId = "";
   String? breed = "";
   String? petAge = "";
 
-  DeviceCard({Key? key, this.imageUrl, this.petName, this.breed, this.petAge})
+  DeviceCard(
+      {Key? key,
+      this.imageUrl,
+      this.petName,
+      this.petId,
+      this.breed,
+      this.petAge})
       : super(key: key);
 
   @override
@@ -97,7 +105,9 @@ class _DeviceCardState extends State<DeviceCard> {
                     borderRadius: BorderRadius.circular(50.0)),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(100.0),
-                  onTap: () {},
+                  onTap: () {
+                    MapScreen(petId: widget.petId!).launch(context);
+                  },
                   child: const Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Icon(
