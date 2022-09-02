@@ -36,6 +36,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   var _isCardVisible = false;
   var petMarker = [];
   var petData = [];
+  var distanceToPet = "";
+  var petAt = "";
   List<LatLng> mapRoutes = [];
   Timer? timer;
 
@@ -55,6 +57,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
            res.add(llng);
           }
           mapRoutes = res;
+          distanceToPet = resp.data["routes"][0]["distance"].toString();
+          petAt = resp.data["routes"][0]["legs"][0]["summary"];
           setState(() {});
         }
       }
@@ -217,7 +221,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 PolylineLayerOptions(
                   polylineCulling: true,
                   polylines: [
-                    Polyline(points: mapRoutes, color: Colors.blue, strokeWidth: 3.0)
+                    Polyline(points: mapRoutes, color: Colors.green, strokeWidth: 4.5)
                   ]
                 )
 
@@ -304,7 +308,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                     Row(
                                                       children: [
                                                         Text(
-                                                          "Distance : 2.0 km / ",
+                                                          "Distance : ",
                                                           style: TextStyle(
                                                               fontSize: 17,
                                                               color: const Color
@@ -314,7 +318,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                                   34,
                                                                   0.7)),
                                                         ),
-                                                        Text("2 km",
+                                                        Text("$distanceToPet meter",
                                                             style: boldTextStyle(
                                                                 size: 15,
                                                                 color: const Color
@@ -337,8 +341,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                     size: 18,
                                                     color: const Color.fromRGBO(
                                                         31, 30, 34, 0.7))),
-                                            const Text(
-                                              "Jl. Gubeng Kertajaya VI A No.46, Kertajaya, Kec. Gubeng, Kota SBY, Jawa Timur 60282",
+                                            Text(
+                                              petAt,
                                               style: TextStyle(
                                                   color: const Color.fromRGBO(
                                                       31, 30, 34, 0.7),
