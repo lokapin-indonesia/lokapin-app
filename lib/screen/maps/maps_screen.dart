@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,7 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
   var _isCardVisible = false;
   var petMarker = [];
   var petData = [];
+  Timer? timer;
 
   dynamic getPetData(id){
     for(var i=0;i<petData.length;i++){
@@ -271,6 +273,17 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
     this.loadCurrentLoc(withAnimate: true);
     super.initState();
     mapController = MapController();
+
+    timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      loadPet();
+      loadCurrentLoc(withAnimate: false);
+    });
+  }
+
+  @override
+  void dispose(){
+    timer?.cancel();
+    super.dispose();
   }
 
   void _animatedMapMove(LatLng destLocation, double destZoom) {
