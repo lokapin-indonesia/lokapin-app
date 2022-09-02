@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lokapin_app/utils/backends/pet-api.dart';
+import 'package:lokapin_app/utils/backends/pets-api.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -21,18 +21,16 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
   FocusNode idFocusNode = FocusNode();
   var nameController = TextEditingController();
   FocusNode nameFocusNode = FocusNode();
-  var birthController = TextEditingController();
-  FocusNode birthFocusNode = FocusNode();
   var breedsController = TextEditingController();
   FocusNode breedsFocusNode = FocusNode();
+  var speciesController = TextEditingController();
+  FocusNode speciesFocusNode = FocusNode();
+  var ageController = TextEditingController();
+  FocusNode ageFocusNode = FocusNode();
   var genderController = TextEditingController();
   FocusNode genderFocusNode = FocusNode();
   var weightController = TextEditingController();
   FocusNode weightFocusNode = FocusNode();
-  var vacController = TextEditingController();
-  FocusNode vacFocusNode = FocusNode();
-  var checkupController = TextEditingController();
-  FocusNode checkupFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -137,6 +135,9 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                   Text("Pet Profile",
                       style: boldTextStyle(size: 22, color: primaryColor)),
                   16.height,
+                  Text("Pet Profile",
+                      style: boldTextStyle(size: 22, color: primaryColor)),
+                  16.height,
                   Text("ID Number",
                       style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
@@ -147,9 +148,7 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                     ),
                     textFieldType: TextFieldType.OTHER,
                     keyboardType: TextInputType.number,
-                    controller: idController,
-                    focus: idFocusNode,
-                    nextFocus: nameFocusNode,
+                    enabled: false,
                   ),
                   16.height,
                   Text("Pet Name",
@@ -163,20 +162,6 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                     textFieldType: TextFieldType.NAME,
                     controller: nameController,
                     focus: nameFocusNode,
-                    nextFocus: birthFocusNode,
-                  ),
-                  16.height,
-                  Text("Pet Birth",
-                      style: boldTextStyle(size: 14, color: Colors.black38)),
-                  AppTextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.black12,
-                    ),
-                    textFieldType: TextFieldType.OTHER,
-                    controller: birthController,
-                    focus: birthFocusNode,
                     nextFocus: breedsFocusNode,
                   ),
                   16.height,
@@ -191,6 +176,34 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                     textFieldType: TextFieldType.OTHER,
                     controller: breedsController,
                     focus: breedsFocusNode,
+                    nextFocus: speciesFocusNode,
+                  ),
+                  16.height,
+                  Text("Pet Species",
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
+                  AppTextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.black12,
+                    ),
+                    textFieldType: TextFieldType.OTHER,
+                    controller: speciesController,
+                    focus: speciesFocusNode,
+                    nextFocus: ageFocusNode,
+                  ),
+                  16.height,
+                  Text("Pet Age",
+                      style: boldTextStyle(size: 14, color: Colors.black38)),
+                  AppTextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.black12,
+                    ),
+                    textFieldType: TextFieldType.OTHER,
+                    controller: ageController,
+                    focus: ageFocusNode,
                     nextFocus: genderFocusNode,
                   ),
                   16.height,
@@ -220,34 +233,6 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                     keyboardType: TextInputType.number,
                     controller: weightController,
                     focus: weightFocusNode,
-                    nextFocus: vacFocusNode,
-                  ),
-                  48.height,
-                  Text("Vacctination Activity",
-                      style: boldTextStyle(size: 14, color: Colors.black38)),
-                  AppTextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.black12,
-                    ),
-                    textFieldType: TextFieldType.OTHER,
-                    controller: vacController,
-                    focus: vacFocusNode,
-                    nextFocus: checkupFocusNode,
-                  ),
-                  16.height,
-                  Text("Medical Check Up Activity",
-                      style: boldTextStyle(size: 14, color: Colors.black38)),
-                  AppTextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.black12,
-                    ),
-                    textFieldType: TextFieldType.OTHER,
-                    controller: checkupController,
-                    focus: checkupFocusNode,
                   ),
                   64.height,
                   AppButton(
@@ -262,20 +247,22 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                           String id = idController.text.toString();
                           String name = nameController.text.toString();
                           String breed = breedsController.text.toString();
+                          String species = genderController.text.toString();
                           String gender = genderController.text.toString();
-                          print(id);
-                          var resp = await PetApi.addPetRequest(
-                              id, name, breed, gender);
-                          if (resp.status == 200) {
-                            showErrorAlertDialog(context, "Success Add PEt",
-                                resp.message, () => Navigator.pop(context));
-                          } else {
-                            showErrorAlertDialog(
-                                context,
-                                "Something wrong happened",
-                                resp.message,
-                                () => Navigator.pop(context));
-                          }
+                          String age = ageController.text.toString();
+                          // print(id);
+                          // var resp = await PetsApi.addPetProfile(
+                          //     id, name, breed, species, gender, age,photo);
+                          // if (resp.status == 200) {
+                          //   showErrorAlertDialog(context, "Success Add Pet",
+                          //       resp.message, () => Navigator.pop(context));
+                          // } else {
+                          //   showErrorAlertDialog(
+                          //       context,
+                          //       "Something wrong happened",
+                          //       resp.message,
+                          //       () => Navigator.pop(context));
+                          // }
                         }
                       }),
                 ],
