@@ -3,47 +3,48 @@ import 'package:nb_utils/nb_utils.dart';
 
 class DeviceCard extends StatefulWidget {
   static String tag = '/DeviceCard';
-  String? imageUrl = "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
+  String? imageUrl =
+      "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
   String? petName = "";
   String? breed = "";
   String? petAge = "";
 
-  DeviceCard({Key? key, this.imageUrl, this.petName, this.breed, this.petAge}) : super(key: key);
+  DeviceCard({Key? key, this.imageUrl, this.petName, this.breed, this.petAge})
+      : super(key: key);
 
   @override
   _DeviceCardState createState() => _DeviceCardState();
-
 }
 
 class _DeviceCardState extends State<DeviceCard> {
   Color bgColor = Colors.white;
   Color borderColor = Colors.black;
 
-  void _changeBgColor(PointerEvent details){
-        setState(() {
-          if(bgColor == Colors.white){
-            bgColor = const Color.fromRGBO(252, 231, 108, 1);
-          }else{
-            bgColor = Colors.white;
-          }
-
-          if(borderColor == Colors.black){
-            setState(() {
-              borderColor = const Color.fromRGBO(252, 231, 108, 1);
-            });
-          }else{
-            borderColor = Colors.black;
-          }
-        });
+  void _changeBgColor(PointerEvent details) {
+    setState(() {
+      if (bgColor == Colors.white) {
+        bgColor = const Color.fromRGBO(252, 231, 108, 1);
+      } else {
+        bgColor = Colors.white;
       }
 
-  @override 
-  Widget build(BuildContext context){
+      if (borderColor == Colors.black) {
+        setState(() {
+          borderColor = const Color.fromRGBO(252, 231, 108, 1);
+        });
+      } else {
+        borderColor = Colors.black;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MouseRegion(
       onEnter: _changeBgColor,
       onExit: _changeBgColor,
       child: Card(
-        color: bgColor,
+          color: bgColor,
           shape: RoundedRectangleBorder(
               side: BorderSide(
                 color: borderColor,
@@ -54,33 +55,37 @@ class _DeviceCardState extends State<DeviceCard> {
               )),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Container(
-              margin: const EdgeInsets.only(right: 20),
-              child: CircleAvatar(
-                  radius: 35,
-                  backgroundColor: Colors.black,
-                  child: Padding(
-                      padding: const EdgeInsets.all(2.5),
-                      child: ClipOval(
-                        child: Image.network(widget.imageUrl!,
-                            width: 130, height: 130, fit: BoxFit.fitWidth),
-                      ))),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                Row(
-                  children: [
-                    Text(
-                      widget.petName!,
-                      style: boldTextStyle(size: 20),
-                    )
-                  ],
+                Container(
+                  margin: const EdgeInsets.only(right: 20),
+                  child: CircleAvatar(
+                      radius: 35,
+                      backgroundColor: Colors.black,
+                      child: Padding(
+                          padding: const EdgeInsets.all(2.5),
+                          child: ClipOval(
+                            child: Image.network(widget.imageUrl!,
+                                width: 130, height: 130, fit: BoxFit.fitWidth),
+                          ))),
                 ),
-                Text(widget.breed!+", "+widget.petAge!+" years old",
-                    style: TextStyle(color: Colors.grey)),
-                Text("1.2 km around here",
-                    style: TextStyle(color: Colors.grey))
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          widget.petName!,
+                          style: boldTextStyle(size: 20),
+                        )
+                      ],
+                    ),
+                    Text(widget.breed! + ", " + widget.petAge! + " years old",
+                        style: const TextStyle(color: Colors.grey)),
+                    Text("1.2 km around here",
+                        style: TextStyle(color: Colors.grey))
+                  ],
+                )
               ],
             ),
             Material(

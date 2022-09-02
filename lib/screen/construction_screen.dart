@@ -16,7 +16,6 @@ class _ConstructionScreenState extends State<ConstructionScreen> {
     return GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
-
           if (!currentFocus.hasPrimaryFocus) {
             currentFocus.unfocus();
           }
