@@ -148,7 +148,9 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                     ),
                     textFieldType: TextFieldType.OTHER,
                     keyboardType: TextInputType.number,
-                    enabled: false,
+                    controller: idController,
+                    focus: idFocusNode,
+                    nextFocus: nameFocusNode,
                   ),
                   16.height,
                   Text("Pet Name",
@@ -244,13 +246,20 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                       width: context.width(),
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
-                          String id = idController.text.toString();
+                          String hardwareId = idController.text.toString();
                           String name = nameController.text.toString();
                           String breed = breedsController.text.toString();
-                          String species = genderController.text.toString();
+                          String species = speciesController.text.toString();
                           String gender = genderController.text.toString();
                           String age = ageController.text.toString();
-                          // print(id);
+                          String weight = weightController.text.toString();
+                          print(hardwareId);
+                          print(name);
+                          print(breed);
+                          print(species);
+                          print(gender);
+                          print(age);
+                          print(weight);
                           // var resp = await PetsApi.addPetProfile(
                           //     id, name, breed, species, gender, age,photo);
                           // if (resp.status == 200) {
