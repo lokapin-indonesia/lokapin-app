@@ -66,7 +66,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   }
 
   dynamic getPetData(id) {
+    print("inside id $id");
     for (var i = 0; i < petData.length; i++) {
+      print("pet data $id == ${petData[i]["id"]}");
       if (petData[i]["id"] == id) {
         return petData[i];
       }
@@ -184,6 +186,25 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     }
 
     return _markerBuilder;
+  }
+
+  void checkInit() async{
+    try{
+      var id = int.parse(widget.petId!);
+
+      if(id>0){
+        var petData = getPetData(id);
+        if(petData!=null){
+          selectedLoc = LatLng(
+              double.parse(petData["lat"]), double.parse(petData["long"]));
+          selectedIndex = int.parse(widget.petId!);
+          _animatedMapMove(selectedLoc, 16.5);
+          setState(() { });
+        }
+      }
+    } on Exception catch(_){
+
+    }
   }
 
   @override
@@ -404,12 +425,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    this.loadPet();
-    this.loadCurrentLoc(withAnimate: true);
+    loadPet();
+    loadCurrentLoc(withAnimate: true);
     super.initState();
-    print("pet id: " + widget.petId!);
+    //print("pet id: " + widget.petId!);
     mapController = MapController();
-
+    checkInit();
     timer = Timer.periodic(Duration(seconds: 5), (timer) {
       loadPet();
       loadCurrentLoc(withAnimate: true);
