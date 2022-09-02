@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:lokapin_app/models/PetModels.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils/backends/pets-api.dart';
@@ -32,6 +35,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   var _isCardVisible = false;
   var petMarker = [];
   var petData = [];
+  Timer? timer;
 
   dynamic getPetData(id) {
     for (var i = 0; i < petData.length; i++) {
@@ -185,6 +189,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 ])
               ],
             ),
+
             Positioned(
                 left: 0,
                 right: 0,
@@ -199,6 +204,15 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       setState(() {});
                     },
                     itemBuilder: (_, index) {
+                      final petData = getPetData(selectedIndex);
+                      var photoToShow;
+                      if (petData['photo'] != null) {
+                        photoToShow =
+                            "http://108.136.230.107/static/image/pet/" +
+                                petData['photo'];
+                      } else {
+                        photoToShow = "assets/animal_profpic.png";
+                      }
                       return Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Card(
@@ -272,6 +286,17 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     super.initState();
     print("pet id: " + widget.petId!);
     mapController = MapController();
+
+    timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      loadPet();
+      loadCurrentLoc(withAnimate: false);
+    });
+  }
+
+  @override
+  void dispose(){
+    timer?.cancel();
+    super.dispose();
   }
 
   void _animatedMapMove(LatLng destLocation, double destZoom) {
