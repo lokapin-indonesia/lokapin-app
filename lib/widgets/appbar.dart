@@ -4,6 +4,8 @@ import 'package:lokapin_app/screen/maps/maps_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/screen/home/home_screen.dart';
 
+import '../screen/maps/maps_screen.dart';
+
 class NavBar extends StatefulWidget {
   static String tag = '/NavBar';
 
