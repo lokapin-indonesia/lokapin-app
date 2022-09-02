@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lokapin_app/screen/profile/profile_Screen.dart';
 import 'package:lokapin_app/utils/backends/pets-api.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:lokapin_app/widgets/dialog.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -31,6 +35,10 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
   var weightController = TextEditingController();
   FocusNode weightFocusNode = FocusNode();
 
+  String petImage =
+      "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
+  File? newImage = null;
+
   Future<void> init() async {
     PetsApi.getPetProfile(widget.id).then((value) => {
           setState(() {
@@ -57,6 +65,11 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
             if (petData["weight"] != null) {
               weightController.text = petData["weight"].toString();
             }
+            if (petData["photo"] != null) {
+              petImage =
+                  "http://108.136.230.107/static/image/user/" + petData["photo"];
+            }
+
           }),
         });
   }
@@ -75,6 +88,28 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
+  }
+
+  void imagePicker() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) {
+        showErrorAlertDialog(context, "Fail select image", 'No image selected',
+                () {
+              Navigator.pop(context);
+            });
+        return;
+      }
+      setState(() {
+        newImage = File(image.path);
+      });
+      // ProfileApi.replaceUserImage(image.path)
+      //     .then((value) => {if (value.status == 200) {}});
+    } on PlatformException catch (e) {
+      showErrorAlertDialog(context, "Fail select image", '', () {
+        Navigator.pop(context);
+      });
+    }
   }
 
   @override
@@ -125,8 +160,8 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                                 child: Padding(
                                     padding: const EdgeInsets.all(5),
                                     child: ClipOval(
-                                      child: Image.asset(
-                                          'assets/animal_profpic.png',
+                                      child: Image.network(
+                                          petImage,
                                           width: 125,
                                           height: 125,
                                           fit: BoxFit.fitWidth),
@@ -153,7 +188,9 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                                     ),
                                   ),
                                 ),
-                                onPressed: () {}),
+                                onPressed: () {
+                                  imagePicker();
+                                }),
                           )
                         ],
                       ),
@@ -172,9 +209,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                     ),
                     textFieldType: TextFieldType.OTHER,
                     keyboardType: TextInputType.number,
-                    controller: idController,
-                    focus: idFocusNode,
-                    nextFocus: nameFocusNode,
+                    enabled: false,
                   ),
                   16.height,
                   Text("Pet Name",
@@ -277,6 +312,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                           String gender = genderController.text.toString();
                           String age = ageController.text.toString();
                           String weight = weightController.text.toString();
+
                           print(id);
                           print(name);
                           print(breed);
@@ -284,33 +320,40 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                           print(gender);
                           print(age);
                           print(weight);
-                          // PetsApi.editPetProfile(
-                          //   pet_id: idController.text.toString(),
-                          //   name: nameController.text.toString(),
-                          //   breed: breedsController.text.toString(),
-                          //   species: speciesController.text.toString(),
-                          //   age: ageController.text.toString(),
-                          //   gender: genderController.text.toString(),
-                          //   weight: weightController.text,
-                          // ).then((value) => {
-                          //       // print("response" + value.data.toString()),
-                          //       if (value.status == 200)
-                          //         {
-                          //           showSuccessfulAlertDialog(
-                          //               context,
-                          //               "Berhasil edit pet profile!",
-                          //               "",
-                          //               () => Navigator.pop(context))
-                          //         }
-                          //       else
-                          //         {
-                          //           showErrorAlertDialog(
-                          //               context,
-                          //               "Gagal edit pet profile!",
-                          //               value.message,
-                          //               () => Navigator.pop(context))
-                          //         }
-                          //     });
+                          PetsApi.editPetProfile(
+                            pet_id: idController.text.toString(),
+                            name: nameController.text.toString(),
+                            breed: breedsController.text.toString(),
+                            species: speciesController.text.toString(),
+                            age: ageController.text.toString(),
+                            gender: genderController.text.toString(),
+                            weight: weightController.text,
+                            photo: newImage
+                          ).then((value) => {
+                                print("response" + value.data.toString()),
+                                if (value.status == 200)
+                                  {
+                                    showSuccessfulAlertDialog(
+                                        context,
+                                        "Berhasil edit Pet profile!",
+                                        "",
+                                        () => {
+                                          Navigator.pop(context),
+                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>const ProfileScreen()))
+                                        })
+                                  }
+                                else
+                                  {
+                                    showErrorAlertDialog(
+                                        context,
+                                        "Gagal edit pet profile!",
+                                        value.message,
+                                        () => {
+                                          Navigator.pop(context),
+                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>const ProfileScreen()))
+                                        })
+                                  }
+                              });
                         }
                       }),
                 ],

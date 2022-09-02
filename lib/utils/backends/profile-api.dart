@@ -88,11 +88,7 @@ class ProfileApi {
     //   data["age"] = age.toString();
     // }
     print("data profil");
-    var fileContentBase64;
-    if (photo != null) {
-      var fileContent = photo.readAsBytesSync();
-      fileContentBase64 = base64.encode(fileContent);
-    }
+
     // print(fileContentBase64);
     var request = http.MultipartRequest(
         'PATCH', Uri.parse(Constant.URL_BE + "user/profile"));

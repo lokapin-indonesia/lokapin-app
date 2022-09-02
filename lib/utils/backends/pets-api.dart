@@ -115,7 +115,8 @@ class PetsApi {
       age = null,
       gender = null,
       weight = null,
-      photo = null}) async {
+      photo = null,
+      }) async {
     var token = await SharedPreferenceHandler.getHandler();
     var thisHeader = {HttpHeaders.cookieHeader: token.getToken()};
 
@@ -153,13 +154,15 @@ class PetsApi {
     var blankResp = json.decode("{}") as Map<String, dynamic>;
     if (photo != null) {
       request.files.add(http.MultipartFile("photo",
-          File(photo).readAsBytes().asStream(), File(photo).lengthSync()));
+          File(photo.path).readAsBytes().asStream(), File(photo.path).lengthSync()));
     }
     var sent = await request.send();
     var response = await http.Response.fromStream(sent);
     if (response.statusCode < 500) {
       var bodyresp = json.decode(response.body) as Map<String, dynamic>;
-      if (response.statusCode == 201) {
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+
         return CustomHttpResponse(
             response.statusCode, bodyresp["message"], bodyresp);
       }
