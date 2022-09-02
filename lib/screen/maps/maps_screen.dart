@@ -203,6 +203,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       _animatedMapMove(selectedLoc, 16.5);
                       setState(() {});
                     },
+                    itemCount: 1,
                     itemBuilder: (_, index) {
                       final petData = getPetData(selectedIndex);
                       var photoToShow;
