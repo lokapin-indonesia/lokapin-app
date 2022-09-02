@@ -38,9 +38,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var petList = [];
   void logout() {
     AuthenticationAPI.logoutApi().then((value) => {
-      sp.revokeToken(),
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()))
-    });
+          sp.revokeToken(),
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => LoginScreen()))
+        });
   }
 
   void changeShowName(result) {
@@ -78,37 +79,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void loadPets() async {
     var response = await PetsApi.getMyPets();
-    if(response.status == 200){
+    if (response.status == 200) {
       var resplist = response.data["result"] as List<dynamic>;
       var arr = [];
-      for(var i=0;i<resplist.length;i++){
+      for (var i = 0; i < resplist.length; i++) {
         var singleResp = resplist[i];
-        String gambar = "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
-        if(singleResp["photo"] != null){
-          gambar = "http://108.136.230.107/static/image/pet/" + singleResp["photo"];
+        String gambar =
+            "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
+        if (singleResp["photo"] != null) {
+          gambar =
+              "http://108.136.230.107/static/image/pet/" + singleResp["photo"];
         }
-        arr.add(
-            PetCard(
-                petData: PetModels(
-                  id: singleResp["id"].toString(),
-                  hardwareId: singleResp["hardware_id"],
-                  name: singleResp["name"],
-                  photo: gambar,
-                  species: singleResp["species"],
-                  breed: singleResp["breed"],
-                  gender: singleResp["gender"],
-                  weight: 3,
-                  age: singleResp["age"],
-                  lat: singleResp["lat"].toString(),
-                  long: singleResp["long"].toString(),
-                  lastUpdated: DateTime.tryParse(singleResp["last_updated"]),
-                  lastPing: DateTime.now(),
-                ),
-                editPet: (id) => {
-                  const EditProfilePetScreen().launch(context),
-                  print(id)
-                })
-        );
+        arr.add(PetCard(
+            petData: PetModels(
+              id: singleResp["id"].toString(),
+              hardwareId: singleResp["hardware_id"],
+              name: singleResp["name"],
+              photo: gambar,
+              species: singleResp["species"],
+              breed: singleResp["breed"],
+              gender: singleResp["gender"],
+              weight: 3,
+              age: singleResp["age"],
+              lat: singleResp["lat"].toString(),
+              long: singleResp["long"].toString(),
+              lastUpdated: DateTime.tryParse(singleResp["last_updated"]),
+              lastPing: DateTime.now(),
+            ),
+            editPet: (String id) => {
+                  EditProfilePetScreen(
+                    id: id,
+                  ).launch(context),
+                }));
       }
 
       setState(() {
@@ -303,9 +305,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     shrinkWrap: true,
                     crossAxisCount: 2,
                     mainAxisSpacing: 20,
-                    children: [
-                      ...petList
-                    ],
+                    children: [...petList],
                   ),
                   64.height,
                   AppButton(
@@ -318,17 +318,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onTap: () async {})
                       .paddingSymmetric(vertical: 10, horizontal: 20),
                   AppButton(
-                          text: "Log out",
-                          textColor: Colors.red,
-                          color: white,
-                          shapeBorder: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.red),
-                              borderRadius: BorderRadius.circular(15)),
-                          width: context.width(),
-                          onTap: () async {
-                            logout();
-                          })
-                      .paddingSymmetric(vertical: 10, horizontal: 20)
+                      text: "Log out",
+                      textColor: Colors.red,
+                      color: white,
+                      shapeBorder: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.red),
+                          borderRadius: BorderRadius.circular(15)),
+                      width: context.width(),
+                      onTap: () async {
+                        logout();
+                      }).paddingSymmetric(vertical: 10, horizontal: 20)
                 ],
               )
             ],
