@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lokapin_app/screen/profile/profile_Screen.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -285,7 +286,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                   context,
                                                   "Berhasil Save Data Baru",
                                                   "",
-                                                  () => Navigator.pop(context))
+                                                  () => {
+                                                    Navigator.pop(context),
+                                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>const ProfileScreen()))
+                                                  })
                                             }
                                           else
                                             {
@@ -293,7 +297,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                   context,
                                                   "Gagal save data baru",
                                                   value.message,
-                                                  () => Navigator.pop(context))
+                                                  () => {
+                                                    Navigator.pop(context),
+                                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>const ProfileScreen()))
+                                                  })
                                             }
                                         });
                               }
