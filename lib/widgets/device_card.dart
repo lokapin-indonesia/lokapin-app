@@ -3,7 +3,6 @@ import 'package:lokapin_app/screen/maps/maps_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DeviceCard extends StatefulWidget {
-  static String tag = '/DeviceCard';
   String? imageUrl =
       "https://img.freepik.com/free-photo/group-portrait-adorable-puppies_53876-64778.jpg?w=2000";
   String? petName = "";

@@ -1,8 +1,6 @@
 import 'dart:convert';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:lokapin_app/constant.dart';
 import 'package:lokapin_app/screen/register/register_screen.dart';
 import 'package:lokapin_app/utils/backends/auth-api.dart';
 import 'package:lokapin_app/utils/colors.dart';
@@ -149,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const NavBar()));
+                                                          const HomeScreen()));
                                             } else {
                                               showErrorAlertDialog(
                                                   context,

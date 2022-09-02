@@ -35,6 +35,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
     PetsApi.getPetProfile(widget.id).then((value) => {
           setState(() {
             var petData = value.data["result"];
+            print(petData);
             if (petData["id"] != null) {
               idController.text = petData["id"].toString();
             }
@@ -171,7 +172,9 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                     ),
                     textFieldType: TextFieldType.OTHER,
                     keyboardType: TextInputType.number,
-                    enabled: false,
+                    controller: idController,
+                    focus: idFocusNode,
+                    nextFocus: nameFocusNode,
                   ),
                   16.height,
                   Text("Pet Name",
@@ -267,33 +270,47 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                       width: context.width(),
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
-                          PetsApi.editPetProfile(
-                            pet_id: idController.text.toString(),
-                            name: nameController.text.toString(),
-                            breed: breedsController.text.toString(),
-                            species: speciesController.text.toString(),
-                            age: ageController.text.toString(),
-                            gender: genderController.text.toString(),
-                            weight: weightController.text,
-                          ).then((value) => {
-                                // print("response" + value.data.toString()),
-                                if (value.status == 200)
-                                  {
-                                    showSuccessfulAlertDialog(
-                                        context,
-                                        "Berhasil edit pet profile!",
-                                        "",
-                                        () => Navigator.pop(context))
-                                  }
-                                else
-                                  {
-                                    showErrorAlertDialog(
-                                        context,
-                                        "Gagal edit pet profile!",
-                                        value.message,
-                                        () => Navigator.pop(context))
-                                  }
-                              });
+                          int id = int.parse(idController.text);
+                          String name = nameController.text.toString();
+                          String breed = breedsController.text.toString();
+                          String species = speciesController.text.toString();
+                          String gender = genderController.text.toString();
+                          String age = ageController.text.toString();
+                          String weight = weightController.text.toString();
+                          print(id);
+                          print(name);
+                          print(breed);
+                          print(species);
+                          print(gender);
+                          print(age);
+                          print(weight);
+                          // PetsApi.editPetProfile(
+                          //   pet_id: idController.text.toString(),
+                          //   name: nameController.text.toString(),
+                          //   breed: breedsController.text.toString(),
+                          //   species: speciesController.text.toString(),
+                          //   age: ageController.text.toString(),
+                          //   gender: genderController.text.toString(),
+                          //   weight: weightController.text,
+                          // ).then((value) => {
+                          //       // print("response" + value.data.toString()),
+                          //       if (value.status == 200)
+                          //         {
+                          //           showSuccessfulAlertDialog(
+                          //               context,
+                          //               "Berhasil edit pet profile!",
+                          //               "",
+                          //               () => Navigator.pop(context))
+                          //         }
+                          //       else
+                          //         {
+                          //           showErrorAlertDialog(
+                          //               context,
+                          //               "Gagal edit pet profile!",
+                          //               value.message,
+                          //               () => Navigator.pop(context))
+                          //         }
+                          //     });
                         }
                       }),
                 ],
