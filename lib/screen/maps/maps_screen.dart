@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lokapin_app/utils/backends/direction-api.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lokapin_app/models/PetModels.dart';
@@ -35,7 +36,30 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   var _isCardVisible = false;
   var petMarker = [];
   var petData = [];
+  List<LatLng> mapRoutes = [];
   Timer? timer;
+
+  void loadMapRoutes() async {
+    if(selectedIndex>0){
+      var petData = getPetData(selectedIndex);
+      if(petData == null){
+        return;
+      }
+      var resp = await DirectionApi.getDirection(myLoc!, selectedLoc);
+      if(resp.status==200){
+        if((resp.data["routes"] as List<dynamic>).length>0){
+          List<LatLng> res = [];
+          List<dynamic> coordinatesData = resp.data["routes"][0]["geometry"]["coordinates"];
+          for(var i=0;i<coordinatesData.length;i++){
+           var llng = LatLng(coordinatesData[i][1], coordinatesData[i][0]);
+           res.add(llng);
+          }
+          mapRoutes = res;
+          setState(() {});
+        }
+      }
+    }
+  }
 
   dynamic getPetData(id) {
     for (var i = 0; i < petData.length; i++) {
@@ -71,10 +95,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       print("GPS service is enabled");
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      myLoc = LatLng(position.latitude, position.longitude);
-      if (withAnimate) {
+      var newloc = LatLng(position.latitude, position.longitude);
+
+      if (withAnimate && newloc!=myLoc) {
         _animatedMapMove(myLoc!, 15);
       }
+      myLoc = LatLng(position.latitude, position.longitude);
       setState(() {});
     } else {
       print("GPS service is disabled.");
@@ -135,6 +161,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               _isCardVisible = true;
               _animatedMapMove(selectedLoc, 16.5);
               setState(() {});
+              this.loadMapRoutes();
             }
           },
           child: AnimatedScale(
@@ -186,8 +213,16 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       height: 40,
                       width: 40,
                       builder: markerBuilder(false, null, true)),
-                ])
+                ]),
+                PolylineLayerOptions(
+                  polylineCulling: true,
+                  polylines: [
+                    Polyline(points: mapRoutes, color: Colors.blue, strokeWidth: 3.0)
+                  ]
+                )
+
               ],
+
             ),
             Positioned(
                 left: 0,
@@ -202,6 +237,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       _animatedMapMove(selectedLoc, 16.5);
                       setState(() {});
                     },
+                    itemCount: 1,
                     itemBuilder: (_, index) {
                       final petData = getPetData(selectedIndex);
                       var photoToShow;
@@ -372,7 +408,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
     timer = Timer.periodic(Duration(seconds: 5), (timer) {
       loadPet();
-      loadCurrentLoc(withAnimate: false);
+      loadCurrentLoc(withAnimate: true);
+      loadMapRoutes();
     });
   }
 
