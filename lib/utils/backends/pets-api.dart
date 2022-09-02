@@ -114,6 +114,8 @@ class PetsApi {
       data["weight"] = weight;
     }
 
+    print(data);
+
     var request = await http.MultipartRequest(
         'PATCH', Uri.parse(Constant.URL_BE + "pet/" + pet_id));
     request.headers.addAll(thisHeader);

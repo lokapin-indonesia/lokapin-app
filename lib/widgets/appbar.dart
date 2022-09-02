@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lokapin_app/screen/construction_screen.dart';
+import 'package:lokapin_app/screen/profile/add_profile_pet_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/screen/home/home_screen.dart';
 
@@ -18,10 +19,7 @@ class _NavBarState extends State<NavBar> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    Text(
-      'Index 1: Map',
-      style: optionStyle,
-    ),
+    MapScreen(),
     ConstructionScreen(),
     ConstructionScreen(),
   ];
