@@ -8,9 +8,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../utils/backends/pets-api.dart';
 
 class MapScreen extends StatefulWidget {
-  static String tag = '/MapScreen';
-
-  const MapScreen({Key? key}) : super(key: key);
+  String? petId = "";
+  // ignore: use_key_in_widget_constructors
+  MapScreen({
+    Key? key,
+    this.petId,
+  }) : super(key: key);
 
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -267,6 +270,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     this.loadPet();
     this.loadCurrentLoc(withAnimate: true);
     super.initState();
+    print("pet id: " + widget.petId!);
     mapController = MapController();
   }
 

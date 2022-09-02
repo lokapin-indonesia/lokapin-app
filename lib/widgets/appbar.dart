@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lokapin_app/screen/construction_screen.dart';
-import 'package:lokapin_app/screen/maps/maps_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:lokapin_app/screen/home/home_screen.dart';
 
@@ -19,11 +18,11 @@ class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    MapScreen(),
-    ConstructionScreen(),
-    ConstructionScreen(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const HomeScreen(),
+    MapScreen(petId: ""),
+    const ConstructionScreen(),
+    const ConstructionScreen(),
   ];
 
   void _onItemTapped(int index) {
