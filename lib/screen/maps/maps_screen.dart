@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,6 +39,40 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
       }
     }
     return null;
+  }
+
+  void geolocPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('Location permissions are denied');
+      }else if(permission == LocationPermission.deniedForever){
+        print("'Location permissions are permanently denied");
+      }else{
+        print("GPS Location service is granted");
+      }
+    }else{
+      print("GPS Location permission granted.");
+    }
+  }
+
+  void loadCurrentLoc({withAnimate = false}) async {
+    geolocPermission();
+    bool servicestatus = await Geolocator.isLocationServiceEnabled();
+
+    if(servicestatus){
+      print("GPS service is enabled");
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      myLoc = LatLng(position.latitude, position.longitude);
+      if(withAnimate){
+        _animatedMapMove(myLoc!, 15);
+      }
+      setState(() {});
+    }else{
+      print("GPS service is disabled.");
+    }
   }
 
   void loadPet() async{
@@ -233,6 +268,7 @@ class _MapScreenState extends State<MapScreen>  with TickerProviderStateMixin {
   @override
   void initState() {
     this.loadPet();
+    this.loadCurrentLoc(withAnimate: true);
     super.initState();
     mapController = MapController();
   }

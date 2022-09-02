@@ -42,6 +42,7 @@ dependencies:
   image_picker: ^0.8.3
   flutter_map: ^1.1.1
   flutter_svg: ^1.1.0
+  geolocator: ^8.0.0
   shared_preferences:
   cached_network_image:
 
