@@ -274,7 +274,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         username:
                                             fullnameController.text.toString(),
                                         phone: phoneController.text.toString(),
-                                        age: ageController.text.toString(),
+                                        age: ageController.text.toInt(),
                                         address:
                                             addressController.text.toString(),
                                         photo: newImage)

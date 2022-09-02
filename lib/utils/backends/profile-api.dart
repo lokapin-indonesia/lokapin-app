@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:lokapin_app/utils/be-const.dart';
-
+import 'package:http_parser/http_parser.dart';
 import '../custom-http-response.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +17,8 @@ class ProfileApi {
       session) async {
     var header = _headers;
     header[HttpHeaders.cookieHeader] = session;
+    var token = await SharedPreferenceHandler.getHandler();
+    print(token.getToken());
     var response = await http.get(Uri.parse(Constant.URL_BE + "user/profile"),
         headers: header);
     var blankResp = json.decode("{}") as Map<String, dynamic>;
@@ -71,29 +72,41 @@ class ProfileApi {
     var token = await SharedPreferenceHandler.getHandler();
     var thisHeader = {HttpHeaders.cookieHeader: token.getToken()};
 
-    Map<String, String> data = {
+    Map<String, dynamic> data = {
       "username": username,
     };
 
     if (phone != null) {
-      data["phone"] = phone.toString();
+      data["phone_number"] = phone.toString();
     }
 
     if (address != null) {
       data["address"] = address;
     }
 
-    if (age != null) {
-      data["age"] = age.toString();
-    }
+    // if (age != null) {
+    //   data["age"] = age.toString();
+    // }
     print("data profil");
-    var fileContent = photo.readAsBytesSync();
-    var fileContentBase64 = base64.encode(fileContent);
+    var fileContentBase64;
+    if (photo != null) {
+      var fileContent = photo.readAsBytesSync();
+      fileContentBase64 = base64.encode(fileContent);
+    }
     // print(fileContentBase64);
-    var request = await http.MultipartRequest(
+    var request = http.MultipartRequest(
         'PATCH', Uri.parse(Constant.URL_BE + "user/profile"));
     request.headers.addAll(thisHeader);
-    request.fields.addAll({...data, photo: fileContentBase64});
+
+    // request.fields.addAll({...data});
+    if(photo != null){
+
+      var multiPart = new http.MultipartFile('photo', File(photo.path).readAsBytes().asStream(), File(photo.path).lengthSync());
+      request.files.add(multiPart);
+    }
+
+
+    // print(request.);
     var blankResp = json.decode("{}") as Map<String, dynamic>;
     // if (photo != null) {
     //   request.files.add(http.MultipartFile("photo",
@@ -106,6 +119,7 @@ class ProfileApi {
     // var response = await request.send();
     var sent = await request.send();
     var response = await http.Response.fromStream(sent);
+    print(response.body);
     if (response.statusCode < 500) {
       var bodyresp = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 201) {
