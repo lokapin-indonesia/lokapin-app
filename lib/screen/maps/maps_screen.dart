@@ -39,9 +39,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     return null;
   }
 
-<<<<<<< HEAD
-  void loadPet() async {
-=======
   void geolocPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
@@ -49,12 +46,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         print('Location permissions are denied');
-      }else if(permission == LocationPermission.deniedForever){
+      } else if (permission == LocationPermission.deniedForever) {
         print("'Location permissions are permanently denied");
-      }else{
+      } else {
         print("GPS Location service is granted");
       }
-    }else{
+    } else {
       print("GPS Location permission granted.");
     }
   }
@@ -63,21 +60,21 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     geolocPermission();
     bool servicestatus = await Geolocator.isLocationServiceEnabled();
 
-    if(servicestatus){
+    if (servicestatus) {
       print("GPS service is enabled");
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
       myLoc = LatLng(position.latitude, position.longitude);
-      if(withAnimate){
+      if (withAnimate) {
         _animatedMapMove(myLoc!, 15);
       }
       setState(() {});
-    }else{
+    } else {
       print("GPS service is disabled.");
     }
   }
 
-  void loadPet() async{
->>>>>>> f2ebbf89511a34676f3b6a50173002557a471318
+  void loadPet() async {
     var response = await PetsApi.getMyPets();
     if (response.status == 200) {
       var resplist = response.data["result"] as List<dynamic>;
