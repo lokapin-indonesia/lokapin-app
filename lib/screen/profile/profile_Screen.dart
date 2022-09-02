@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lokapin_app/models/PetModels.dart';
 import 'package:lokapin_app/screen/login/login_screen.dart';
+import 'package:lokapin_app/screen/profile/add_profile_pet_screen.dart';
 import 'package:lokapin_app/screen/profile/edit_profile_pet_screen.dart';
 import 'package:lokapin_app/screen/profile/edit_profile_screen.dart';
 import 'package:lokapin_app/utils/backends/auth-api.dart';
@@ -309,14 +310,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   64.height,
                   AppButton(
-                          text: "Add New",
-                          textColor: Colors.white,
-                          color: primaryColor,
-                          shapeBorder: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          width: context.width(),
-                          onTap: () async {})
-                      .paddingSymmetric(vertical: 10, horizontal: 20),
+                      text: "Add New",
+                      textColor: Colors.white,
+                      color: primaryColor,
+                      shapeBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      width: context.width(),
+                      onTap: () async {
+                        const AddProfilePetScreen().launch(context);
+                      }).paddingSymmetric(vertical: 10, horizontal: 20),
                   AppButton(
                       text: "Log out",
                       textColor: Colors.red,
