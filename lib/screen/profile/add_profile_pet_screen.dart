@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lokapin_app/utils/backends/pets-api.dart';
 import 'package:lokapin_app/utils/colors.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -34,6 +36,10 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
   var weightController = TextEditingController();
   FocusNode weightFocusNode = FocusNode();
 
+  String petImage =
+      "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png";
+  File? newImage = null;
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +56,28 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
+  }
+
+  void imagePicker() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) {
+        showErrorAlertDialog(context, "Fail select image", 'No image selected',
+            () {
+          Navigator.pop(context);
+        });
+        return;
+      }
+      setState(() {
+        newImage = File(image.path);
+      });
+      // ProfileApi.replaceUserImage(image.path)
+      //     .then((value) => {if (value.status == 200) {}});
+    } on PlatformException catch (e) {
+      showErrorAlertDialog(context, "Fail select image", '', () {
+        Navigator.pop(context);
+      });
+    }
   }
 
   @override
@@ -128,7 +156,9 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                                     ),
                                   ),
                                 ),
-                                onPressed: () {}),
+                                onPressed: () {
+                                  imagePicker();
+                                }),
                           )
                         ],
                       ),
@@ -259,8 +289,15 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                           // print(gender);
                           // print(age);
                           // print(weight);
-                          var resp = await PetsApi.addPetProfile(hardwareId,
-                              name, breed, species, gender, age, weight);
+                          var resp = await PetsApi.addPetProfile(
+                              id: hardwareId,
+                              name: name,
+                              breed: breed,
+                              species: species,
+                              gender: gender,
+                              age: age,
+                              weight: weight,
+                              photo: newImage);
                           if (resp.status == 200) {
                             showErrorAlertDialog(context, "Success Add Pet",
                                 resp.message, () => Navigator.pop(context));
