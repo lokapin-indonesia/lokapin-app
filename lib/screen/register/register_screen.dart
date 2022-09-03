@@ -183,14 +183,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                   'Warning',
                                                   'Password and Confirm Password not match!',
                                                   () => Navigator.pop(context));
-                                            }else{
-                                              var resp = await AuthenticationAPI.registerRequest(name, email, password);
-                                              if(resp.status==201){
-                                                showSuccessfulAlertDialog(context, "Berhasil Daftar", "Pendaftaran akun anda berhasil, silahkan login", () => {
-                                                  LoginScreen().launch(context)
-                                                });
+                                            } else {
+                                              var resp = await AuthenticationAPI
+                                                  .registerRequest(
+                                                      name, email, password);
+                                              if (resp.status == 201) {
+                                                showSuccessfulAlertDialog(
+                                                    context,
+                                                    "Berhasil Daftar",
+                                                    "Pendaftaran akun anda berhasil, silahkan login",
+                                                    () => {
+                                                          LoginScreen()
+                                                              .launch(context)
+                                                        });
                                               } else {
-                                                showErrorAlertDialog(context, "Failed register", resp.message, ()=>Navigator.pop(context));
+                                                showErrorAlertDialog(
+                                                    context,
+                                                    "Failed register",
+                                                    json.decode(resp.message)[
+                                                        "error_message"],
+                                                    () =>
+                                                        Navigator.pop(context));
                                               }
                                             }
                                           }
@@ -233,20 +246,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
-  // void _login(response) {
-  //   if (response.statusCode == 200) {
-  //     final responseBody = json.decode(response.body);
-  //     String jwt = responseBody['Token'];
-  //     // storage.write('token', jwt);
-
-  //     // Map<String, dynamic> jwtPayload = JwtHelper.parseJwtPayLoad(jwt);
-  //     // storage.write('parent_id', jwtPayload['parent_id']);
-  //     // storage.write('child_id', jwtPayload['child_id']);
-  //     // LandingScreen().launch(context);
-  //   } else {
-  //     showErrorAlertDialog(context, 'Invalid Credentials',
-  //         'Wrong email or password', () => Navigator.pop(context));
-  //   }
-  // }
 }

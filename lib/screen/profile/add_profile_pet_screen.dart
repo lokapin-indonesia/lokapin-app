@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lokapin_app/utils/backends/pets-api.dart';
@@ -135,9 +137,6 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                   Text("Pet Profile",
                       style: boldTextStyle(size: 22, color: primaryColor)),
                   16.height,
-                  Text("Pet Profile",
-                      style: boldTextStyle(size: 22, color: primaryColor)),
-                  16.height,
                   Text("ID Number",
                       style: boldTextStyle(size: 14, color: Colors.black38)),
                   AppTextField(
@@ -253,25 +252,28 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                           String gender = genderController.text.toString();
                           String age = ageController.text.toString();
                           String weight = weightController.text.toString();
-                          print(hardwareId);
-                          print(name);
-                          print(breed);
-                          print(species);
-                          print(gender);
-                          print(age);
-                          print(weight);
-                          // var resp = await PetsApi.addPetProfile(
-                          //     id, name, breed, species, gender, age,photo);
-                          // if (resp.status == 200) {
-                          //   showErrorAlertDialog(context, "Success Add Pet",
-                          //       resp.message, () => Navigator.pop(context));
-                          // } else {
-                          //   showErrorAlertDialog(
-                          //       context,
-                          //       "Something wrong happened",
-                          //       resp.message,
-                          //       () => Navigator.pop(context));
-                          // }
+                          // print(hardwareId);
+                          // print(name);
+                          // print(breed);
+                          // print(species);
+                          // print(gender);
+                          // print(age);
+                          // print(weight);
+                          var resp = await PetsApi.addPetProfile(hardwareId,
+                              name, breed, species, gender, age, weight);
+                          if (resp.status == 200) {
+                            showErrorAlertDialog(context, "Success Add Pet",
+                                resp.message, () => Navigator.pop(context));
+                          } else {
+                            showErrorAlertDialog(
+                                context,
+                                "Something wrong happened",
+                                json.decode(resp.message)["message"] +
+                                    ',' +
+                                    json.decode(resp.message)["details"]["body"]
+                                        [0]["message"],
+                                () => Navigator.pop(context));
+                          }
                         }
                       }),
                 ],

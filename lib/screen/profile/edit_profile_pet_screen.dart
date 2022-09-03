@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -66,10 +67,9 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
               weightController.text = petData["weight"].toString();
             }
             if (petData["photo"] != null) {
-              petImage =
-                  "http://108.136.230.107/static/image/user/" + petData["photo"];
+              petImage = "http://108.136.230.107/static/image/user/" +
+                  petData["photo"];
             }
-
           }),
         });
   }
@@ -95,9 +95,9 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) {
         showErrorAlertDialog(context, "Fail select image", 'No image selected',
-                () {
-              Navigator.pop(context);
-            });
+            () {
+          Navigator.pop(context);
+        });
         return;
       }
       setState(() {
@@ -160,8 +160,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                                 child: Padding(
                                     padding: const EdgeInsets.all(5),
                                     child: ClipOval(
-                                      child: Image.network(
-                                          petImage,
+                                      child: Image.network(petImage,
                                           width: 125,
                                           height: 125,
                                           fit: BoxFit.fitWidth),
@@ -321,39 +320,42 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                           print(age);
                           print(weight);
                           PetsApi.editPetProfile(
-                            pet_id: idController.text.toString(),
-                            name: nameController.text.toString(),
-                            breed: breedsController.text.toString(),
-                            species: speciesController.text.toString(),
-                            age: ageController.text.toString(),
-                            gender: genderController.text.toString(),
-                            weight: weightController.text,
-                            photo: newImage
-                          ).then((value) => {
-                                print("response" + value.data.toString()),
-                                if (value.status == 200)
-                                  {
-                                    showSuccessfulAlertDialog(
-                                        context,
-                                        "Berhasil edit Pet profile!",
-                                        "",
-                                        () => {
-                                          Navigator.pop(context),
-                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>const ProfileScreen()))
-                                        })
-                                  }
-                                else
-                                  {
-                                    showErrorAlertDialog(
-                                        context,
-                                        "Gagal edit pet profile!",
-                                        value.message,
-                                        () => {
-                                          Navigator.pop(context),
-                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>const ProfileScreen()))
-                                        })
-                                  }
-                              });
+                                  pet_id: idController.text.toString(),
+                                  name: nameController.text.toString(),
+                                  breed: breedsController.text.toString(),
+                                  species: speciesController.text.toString(),
+                                  age: ageController.text.toString(),
+                                  gender: genderController.text.toString(),
+                                  weight: weightController.text,
+                                  photo: newImage)
+                              .then((value) => {
+                                    print("response" + value.data.toString()),
+                                    if (value.status == 200)
+                                      {
+                                        showSuccessfulAlertDialog(
+                                            context,
+                                            "Berhasil edit Pet profile!",
+                                            "",
+                                            () => {
+                                                  Navigator.pop(context),
+                                                })
+                                      }
+                                    else
+                                      {
+                                        showErrorAlertDialog(
+                                            context,
+                                            "Gagal edit pet profile!",
+                                            json.decode(
+                                                    value.message)["message"] +
+                                                ',' +
+                                                json.decode(value.message)[
+                                                        "details"]["body"][0]
+                                                    ["message"],
+                                            () => {
+                                                  Navigator.pop(context),
+                                                })
+                                      }
+                                  });
                         }
                       }),
                 ],
