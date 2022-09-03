@@ -588,11 +588,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   void initState() {
     loadPet();
     loadCurrentLoc(withAnimate: true);
-    // timer = Timer.periodic(Duration(seconds: 5), (timer) {
-    //   loadPet();
-    //   loadCurrentLoc(withAnimate: true);
-    //   loadMapRoutes();
-    // });
+    timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      loadPet();
+      loadCurrentLoc(withAnimate: true);
+      loadMapRoutes();
+    });
     mapController = MapController();
     super.initState();
     Future.delayed(const Duration(seconds: 1), (){
