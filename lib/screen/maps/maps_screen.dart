@@ -198,6 +198,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           selectedLoc = LatLng(
               double.parse(petData["lat"]), double.parse(petData["long"]));
           selectedIndex = int.parse(widget.petId!);
+          pageController.animateToPage(
+            selectedIndex,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+          _isCardVisible = true;
           _animatedMapMove(selectedLoc, 16.5);
           setState(() { });
         }
@@ -425,21 +431,20 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    if(widget.petId==""){
+    loadPet();
+    loadCurrentLoc(withAnimate: true);
+    timer = Timer.periodic(Duration(seconds: 5), (timer) {
       loadPet();
       loadCurrentLoc(withAnimate: true);
-      timer = Timer.periodic(Duration(seconds: 5), (timer) {
-        loadPet();
-        loadCurrentLoc(withAnimate: true);
-        loadMapRoutes();
-      });
-    }else{
-      timer = Timer.periodic(Duration(seconds: 5), (timer) {
-        loadCurrentLoc(withAnimate: true);
-        loadMapRoutes();
-      });
-    }
+      loadMapRoutes();
+    });
     super.initState();
+    Future.delayed(const Duration(seconds: 1), (){
+      if(widget.petId != ""){
+        print("cikurrrayyyy");
+        checkInit();
+      }
+    });
     //print("pet id: " + widget.petId!);
     mapController = MapController();
 
