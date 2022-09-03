@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Container(
                   width: context.width(),
-                  height: context.height(),
+                  // height: context.height(),
                   decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/bg_home.png'),
@@ -232,31 +232,30 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: boldTextStyle(
                                   size: 20, weight: FontWeight.w600))
                           .paddingAll(16),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ...petCards,
-                          AppButton(
-                              width: context.width() - 30,
-                              height: 90,
-                              shapeBorder: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      color: Colors.black, width: 2.5),
-                                  borderRadius: BorderRadius.circular(10)),
-                              elevation: 0,
-                              onTap: () {
-                                const AddProfilePetScreen().launch(context);
-                              },
-                              child: Text(
-                                "+ Add New Pet",
-                                style: boldTextStyle(
-                                    size: 20, weight: FontWeight.bold),
-                              ))
-                        ],
-                      ).paddingAll(16)
+                      // Column(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+
+                      //   ],
+                      // ).paddingAll(16)
                     ],
                   ),
-                )
+                ),
+                ...petCards,
+                AppButton(
+                    width: context.width() - 30,
+                    height: 90,
+                    shapeBorder: RoundedRectangleBorder(
+                        side: const BorderSide(color: Colors.black, width: 2.5),
+                        borderRadius: BorderRadius.circular(10)),
+                    elevation: 0,
+                    onTap: () {
+                      const AddProfilePetScreen().launch(context);
+                    },
+                    child: Text(
+                      "+ Add New Pet",
+                      style: boldTextStyle(size: 20, weight: FontWeight.bold),
+                    ))
               ],
             ),
           ),
