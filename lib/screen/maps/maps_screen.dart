@@ -176,7 +176,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 500),
               opacity: isConnected
-                  ? (isPet ? (selectedIndex == currIdx ? 1 : 0.5) : 1)
+                  ? (isPet ? (selectedIndex == currIdx ? 1 : 0.6) : 1)
                   : 0.65,
               child: SvgPicture.asset(
                 isPet ? 'assets/map_marker.svg' : 'assets/map_marker_user.svg',
@@ -425,17 +425,24 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    loadPet();
-    loadCurrentLoc(withAnimate: true);
+    if(widget.petId==""){
+      loadPet();
+      loadCurrentLoc(withAnimate: true);
+      timer = Timer.periodic(Duration(seconds: 5), (timer) {
+        loadPet();
+        loadCurrentLoc(withAnimate: true);
+        loadMapRoutes();
+      });
+    }else{
+      timer = Timer.periodic(Duration(seconds: 5), (timer) {
+        loadCurrentLoc(withAnimate: true);
+        loadMapRoutes();
+      });
+    }
     super.initState();
     //print("pet id: " + widget.petId!);
     mapController = MapController();
-    checkInit();
-    timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      loadPet();
-      loadCurrentLoc(withAnimate: true);
-      loadMapRoutes();
-    });
+
   }
 
   @override
