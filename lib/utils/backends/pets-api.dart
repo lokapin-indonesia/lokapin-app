@@ -77,28 +77,56 @@ class PetsApi {
   }
 
   static Future<CustomHttpResponse<Map<dynamic, dynamic>>> addPetProfile(
-      id, name, breed, species, gender, age, weight) async {
+      {id, name, breed, species, gender, age, weight, photo}) async {
     var token = await SharedPreferenceHandler.getHandler();
     var thisHeader = {HttpHeaders.cookieHeader: token.getToken()};
 
-    var data = {
+    Map<String, String> data = {
       "hardware_id": id,
-      "name": name,
-      "species": species,
-      "breed": breed,
-      "gender": gender,
-      "age": int.parse(age),
-      "weight": int.parse(weight),
     };
-    print(json.encode(data));
-    var response = await http.post(Uri.parse(Constant.URL_BE + "/pet"),
-        body: json.encode(data), headers: thisHeader);
-    print(json.decode(response.body));
-    var blankResp = json.decode("{}");
 
+    if (name != null) {
+      data["name"] = name.toString();
+    }
+
+    if (breed != null) {
+      data["breed"] = breed.toString();
+    }
+
+    if (species != null) {
+      data["species"] = species;
+    }
+
+    if (age != null) {
+      data["age"] = age.toString();
+    }
+    if (gender != null) {
+      data["gender"] = gender.toString();
+    }
+    if (weight != null) {
+      data["weight"] = weight.toString();
+    }
+
+    var request =
+        await http.MultipartRequest('POST', Uri.parse(Constant.URL_BE + "pet"));
+    request.headers.addAll(thisHeader);
+    print(data);
+    request.fields.addAll(data);
+
+    var blankResp = json.decode("{}") as Map<String, dynamic>;
+    if (photo != null) {
+      request.files.add(http.MultipartFile(
+          "photo",
+          File(photo.path).readAsBytes().asStream(),
+          File(photo.path).lengthSync()));
+    }
+    var sent = await request.send();
+    var response = await http.Response.fromStream(sent);
+    print(response.statusCode);
     if (response.statusCode < 500) {
-      var bodyresp = json.decode(response.body);
-      if (response.statusCode == 201) {
+      var bodyresp = json.decode(response.body) as Map<String, dynamic>;
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
         return CustomHttpResponse(
             response.statusCode, bodyresp["message"], bodyresp);
       }
