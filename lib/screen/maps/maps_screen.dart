@@ -36,6 +36,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   var _isCardVisible = false;
   var _isShowVirtualPetZone = false;
   var _isShowFindYourPet = false;
+  double _sliderValue = 0;
   var petMarker = [];
   var petData = [];
   var distanceToPet = "";
@@ -500,6 +501,16 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                 ),
                                                 ),
                                                 15.height,
+                                                Slider(value: _sliderValue,
+                                                max: 2000,
+                                                divisions: 50,
+                                                label: _sliderValue.round().toString() + ' meter',
+                                                 onChanged: (double value){
+                                                  setState(() {
+                                                    _sliderValue = value;
+                                                  });
+                                                }),
+                                                15.height,
                                                 Center(
                                                   child: Text(
                                                   "If your pet exceeds the set limit, you will get notified.",
@@ -676,7 +687,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     loadPet();
-    loadCurrentLoc(withAnimate: true);
+    // loadCurrentLoc(withAnimate: true);
     timer = Timer.periodic(Duration(seconds: 5), (timer) {
       loadPet();
       loadCurrentLoc(withAnimate: true);
