@@ -76,8 +76,8 @@ class PetsApi {
     return CustomHttpResponse(response.statusCode, response.body, blankResp);
   }
 
-  static Future<CustomHttpResponse<Map<String, dynamic>>> addPetProfile(
-      id, name, breed, species, gender, age, photo) async {
+  static Future<CustomHttpResponse<Map<dynamic, dynamic>>> addPetProfile(
+      id, name, breed, species, gender, age, weight) async {
     var token = await SharedPreferenceHandler.getHandler();
     var thisHeader = {HttpHeaders.cookieHeader: token.getToken()};
 
@@ -87,16 +87,17 @@ class PetsApi {
       "species": species,
       "breed": breed,
       "gender": gender,
-      "age": age,
-      "photo": photo,
+      "age": int.parse(age),
+      "weight": int.parse(weight),
     };
-
+    print(json.encode(data));
     var response = await http.post(Uri.parse(Constant.URL_BE + "/pet"),
-        body: data, headers: thisHeader);
-    var blankResp = json.decode("{}") as Map<String, dynamic>;
+        body: json.encode(data), headers: thisHeader);
+    print(json.decode(response.body));
+    var blankResp = json.decode("{}");
 
     if (response.statusCode < 500) {
-      var bodyresp = json.decode(response.body) as Map<String, dynamic>;
+      var bodyresp = json.decode(response.body);
       if (response.statusCode == 201) {
         return CustomHttpResponse(
             response.statusCode, bodyresp["message"], bodyresp);
@@ -107,16 +108,16 @@ class PetsApi {
     return CustomHttpResponse(response.statusCode, response.body, blankResp);
   }
 
-  static Future<CustomHttpResponse<Map<String, dynamic>>> editPetProfile(
-      {pet_id,
-      name = null,
-      breed = null,
-      species = null,
-      age = null,
-      gender = null,
-      weight = null,
-      photo = null,
-      }) async {
+  static Future<CustomHttpResponse<Map<String, dynamic>>> editPetProfile({
+    pet_id,
+    name,
+    breed,
+    species,
+    age,
+    gender,
+    weight,
+    photo,
+  }) async {
     var token = await SharedPreferenceHandler.getHandler();
     var thisHeader = {HttpHeaders.cookieHeader: token.getToken()};
 
@@ -143,7 +144,7 @@ class PetsApi {
       data["gender"] = gender.toString();
     }
     if (weight != null) {
-      data["weight"] = weight;
+      data["weight"] = weight.toString();
     }
 
     var request = await http.MultipartRequest(
@@ -153,8 +154,10 @@ class PetsApi {
 
     var blankResp = json.decode("{}") as Map<String, dynamic>;
     if (photo != null) {
-      request.files.add(http.MultipartFile("photo",
-          File(photo.path).readAsBytes().asStream(), File(photo.path).lengthSync()));
+      request.files.add(http.MultipartFile(
+          "photo",
+          File(photo.path).readAsBytes().asStream(),
+          File(photo.path).lengthSync()));
     }
     var sent = await request.send();
     var response = await http.Response.fromStream(sent);
@@ -162,7 +165,6 @@ class PetsApi {
       var bodyresp = json.decode(response.body) as Map<String, dynamic>;
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-
         return CustomHttpResponse(
             response.statusCode, bodyresp["message"], bodyresp);
       }

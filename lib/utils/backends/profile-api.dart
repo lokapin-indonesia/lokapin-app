@@ -64,55 +64,36 @@ class ProfileApi {
   }
 
   static Future<CustomHttpResponse> editUserRequest(
-      {username,
-      phone = null,
-      address = null,
-      age = null,
-      photo = null}) async {
+      {username, phone, address, age, photo}) async {
     var token = await SharedPreferenceHandler.getHandler();
     var thisHeader = {HttpHeaders.cookieHeader: token.getToken()};
 
-    Map<String, dynamic> data = {
-      "username": username,
-    };
-
+    Map<String, String> data = {};
+    if (username != null) {
+      data["username"] = username.toString();
+    }
     if (phone != null) {
       data["phone_number"] = phone.toString();
     }
 
     if (address != null) {
-      data["address"] = address;
+      data["address"] = address.toString();
     }
-
-    // if (age != null) {
-    //   data["age"] = age.toString();
-    // }
-    print("data profil");
-
-    // print(fileContentBase64);
     var request = http.MultipartRequest(
         'PATCH', Uri.parse(Constant.URL_BE + "user/profile"));
     request.headers.addAll(thisHeader);
+    request.fields.addAll({...data});
+    request.fields['age'] = age.toString();
 
-    // request.fields.addAll({...data});
-    if(photo != null){
-
-      var multiPart = new http.MultipartFile('photo', File(photo.path).readAsBytes().asStream(), File(photo.path).lengthSync());
-      request.files.add(multiPart);
-    }
-
-
-    // print(request.);
-    var blankResp = json.decode("{}") as Map<String, dynamic>;
     // if (photo != null) {
-    //   request.files.add(http.MultipartFile("photo",
-    //       File(photo.path).readAsBytes().asStream(), File(photo).lengthSync()));
+    //   var multiPart = new http.MultipartFile(
+    //       'photo',
+    //       File(photo.path).readAsBytes().asStream(),
+    //       File(photo.path).lengthSync());
+    //   request.files.add(multiPart);
     // }
-    // var multipartFile = new http.MultipartFile('file', stream, length,
-    //     filename: basename(imageFile.path));
-    // //contentType: new MediaType('image', 'png'));
-    // request.files.add(multipartFile);
-    // var response = await request.send();
+
+    var blankResp = json.decode("{}") as Map<String, dynamic>;
     var sent = await request.send();
     var response = await http.Response.fromStream(sent);
     print(response.body);

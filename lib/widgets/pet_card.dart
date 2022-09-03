@@ -29,13 +29,14 @@ class PetCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
-                      height: 50,
+                      height: 40,
                     ),
                     Row(
                       children: [
-                        Text(petData?.name ?? "-",
-                            style: boldTextStyle(
-                                size: 22, weight: FontWeight.w600)),
+                        Flexible(
+                            child: Text(petData?.name ?? "-",
+                                style: boldTextStyle(
+                                    size: 22, weight: FontWeight.w600))),
                         petData?.gender!.toLowerCase() == "male"
                             ? Icon(
                                 Icons.male,

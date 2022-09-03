@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -287,20 +288,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                   "Berhasil Save Data Baru",
                                                   "",
                                                   () => {
-                                                    Navigator.pop(context),
-                                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>const ProfileScreen()))
-                                                  })
+                                                        Navigator.pop(context),
+                                                      })
                                             }
                                           else
                                             {
                                               showErrorAlertDialog(
                                                   context,
                                                   "Gagal save data baru",
-                                                  value.message,
+                                                  json.decode(value.message)[
+                                                          "message"] +
+                                                      ',' +
+                                                      json.decode(value
+                                                                  .message)[
+                                                              "details"]["body"]
+                                                          [0]["message"],
                                                   () => {
-                                                    Navigator.pop(context),
-                                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=>const ProfileScreen()))
-                                                  })
+                                                        Navigator.pop(context),
+                                                      })
                                             }
                                         });
                               }
