@@ -189,6 +189,7 @@ class PetsApi {
     }
     var sent = await request.send();
     var response = await http.Response.fromStream(sent);
+    print(response.body.toString());
     if (response.statusCode < 500) {
       var bodyresp = json.decode(response.body) as Map<String, dynamic>;
 

@@ -345,12 +345,7 @@ class _EditProfilePetScreenState extends State<EditProfilePetScreen> {
                                         showErrorAlertDialog(
                                             context,
                                             "Gagal edit pet profile!",
-                                            json.decode(
-                                                    value.message)["message"] +
-                                                ',' +
-                                                json.decode(value.message)[
-                                                        "details"]["body"][0]
-                                                    ["message"],
+                                            "",
                                             () => {
                                                   Navigator.pop(context),
                                                 })

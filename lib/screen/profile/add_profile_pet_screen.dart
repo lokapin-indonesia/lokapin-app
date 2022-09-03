@@ -305,10 +305,7 @@ class _AddProfilePetScreenState extends State<AddProfilePetScreen> {
                             showErrorAlertDialog(
                                 context,
                                 "Something wrong happened",
-                                json.decode(resp.message)["message"] +
-                                    ',' +
-                                    json.decode(resp.message)["details"]["body"]
-                                        [0]["message"],
+                                "",
                                 () => Navigator.pop(context));
                           }
                         }
