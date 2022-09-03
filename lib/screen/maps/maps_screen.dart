@@ -34,6 +34,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   int selectedIndex = 0;
 
   var _isCardVisible = false;
+  var _isShowVirtualPetZone = false;
+  var _isShowFindYourPet = false;
   var petMarker = [];
   var petData = [];
   var distanceToPet = "";
@@ -132,6 +134,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           }
 
           pdata.add(singleResp);
+          print(pdata);
           var latlong = LatLng(double.parse(singleResp["lat"]),
               double.parse(singleResp["long"]));
           arr.add(Marker(
@@ -155,11 +158,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       return GestureDetector(
           onTap: () {
             if (currIdx != null) {
-              pageController.animateToPage(
-                currIdx,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
+              // pageController.animateToPage(
+              //   currIdx,
+              //   duration: const Duration(milliseconds: 500),
+              //   curve: Curves.easeInOut,
+              // );
               selectedIndex = currIdx;
               var petData = getPetData(currIdx);
               selectedLoc = LatLng(
@@ -198,11 +201,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           selectedLoc = LatLng(
               double.parse(petData["lat"]), double.parse(petData["long"]));
           selectedIndex = int.parse(widget.petId!);
-          pageController.animateToPage(
-            selectedIndex,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-          );
+          // pageController.animateToPage(
+          //   selectedIndex,
+          //   duration: const Duration(milliseconds: 500),
+          //   curve: Curves.easeInOut,
+          // );
           _isCardVisible = true;
           _animatedMapMove(selectedLoc, 16.5);
           setState(() { });
@@ -260,7 +263,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 right: 0,
                 bottom: 2,
                 height: MediaQuery.of(context).size.height *
-                    (_isCardVisible ? 0.3 : 0),
+                    (_isCardVisible ? 0.35 : 0),
                 child: PageView.builder(
                     controller: pageController,
                     onPageChanged: (val) {
@@ -391,7 +394,10 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                                     .circular(
                                                                         10)),
                                                     elevation: 0,
-                                                    onTap: () {},
+                                                    onTap: () {
+                                                      _isCardVisible = false;
+                                                      _isShowVirtualPetZone = true;
+                                                    },
                                                     child: Text(
                                                         "Virtual Pet Zone")),
                                                 AppButton(
@@ -404,7 +410,156 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                                     .circular(
                                                                         10)),
                                                     elevation: 0,
-                                                    onTap: () {},
+                                                    onTap: () {_isShowVirtualPetZone = true; _isCardVisible = false;},
+                                                    child: Text(
+                                                      "Find Your Pet",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ))
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ).paddingAll(3),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                              ],
+                            ),
+                          ));
+                    })),
+            Positioned(
+                left: 0,
+                right: 0,
+                bottom: 2,
+                height: MediaQuery.of(context).size.height *
+                    (_isShowFindYourPet ? 0.35 : 0),
+                child: PageView.builder(
+                    controller: pageController,
+                    onPageChanged: (val) {
+                      selectedIndex = val;
+                      _animatedMapMove(selectedLoc, 16.5);
+                      setState(() {});
+                    },
+                    itemCount: 1,
+                    itemBuilder: (_, index) {
+                      return Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            color: Colors.white,
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                CircleAvatar(
+                                                    radius: 35,
+                                                    backgroundColor:
+                                                    Colors.black,),
+                                                const SizedBox(width: 10),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                          " is near from home",
+                                                      style: boldTextStyle(
+                                                          size: 17,
+                                                          color: const Color
+                                                              .fromRGBO(
+                                                              31, 30, 34, 0.7)),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Distance : ",
+                                                          style: TextStyle(
+                                                              fontSize: 17,
+                                                              color: const Color
+                                                                  .fromRGBO(
+                                                                  31,
+                                                                  30,
+                                                                  34,
+                                                                  0.7)),
+                                                        ),
+                                                        Text("$distanceToPet meter",
+                                                            style: boldTextStyle(
+                                                                size: 15,
+                                                                color: const Color
+                                                                    .fromRGBO(
+                                                                    31,
+                                                                    30,
+                                                                    34,
+                                                                    0.7)))
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            10.height,
+                                            Text(
+
+                                                    " is running at a",
+                                                style: boldTextStyle(
+                                                    size: 18,
+                                                    color: const Color.fromRGBO(
+                                                        31, 30, 34, 0.7))),
+                                            Text(
+                                              petAt,
+                                              style: TextStyle(
+                                                  color: const Color.fromRGBO(
+                                                      31, 30, 34, 0.7),
+                                                  fontSize: 12),
+                                            ),
+                                            30.height,
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                AppButton(
+                                                    width: 140,
+                                                    color: Color(0xFFFCE76C),
+                                                    shapeBorder:
+                                                    RoundedRectangleBorder(
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            10)),
+                                                    elevation: 0,
+                                                    onTap: () {
+                                                      _isCardVisible = false;
+                                                      _isShowVirtualPetZone = true;
+                                                    },
+                                                    child: Text(
+                                                        "Virtual Pet Zone")),
+                                                AppButton(
+                                                    width: 140,
+                                                    color: Color(0xFF1F1E22),
+                                                    shapeBorder:
+                                                    RoundedRectangleBorder(
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            10)),
+                                                    elevation: 0,
+                                                    onTap: () {_isShowVirtualPetZone = true; _isCardVisible = false;},
                                                     child: Text(
                                                       "Find Your Pet",
                                                       style: TextStyle(
@@ -433,11 +588,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   void initState() {
     loadPet();
     loadCurrentLoc(withAnimate: true);
-    timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      loadPet();
-      loadCurrentLoc(withAnimate: true);
-      loadMapRoutes();
-    });
+    // timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    //   loadPet();
+    //   loadCurrentLoc(withAnimate: true);
+    //   loadMapRoutes();
+    // });
+    mapController = MapController();
     super.initState();
     Future.delayed(const Duration(seconds: 1), (){
       if(widget.petId != ""){
@@ -445,8 +601,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         checkInit();
       }
     });
-    //print("pet id: " + widget.petId!);
-    mapController = MapController();
+
 
   }
 
