@@ -115,10 +115,8 @@ class PetsApi {
 
     var blankResp = json.decode("{}") as Map<String, dynamic>;
     if (photo != null) {
-      request.files.add(http.MultipartFile(
-          "photo",
-          File(photo.path).readAsBytes().asStream(),
-          File(photo.path).lengthSync()));
+      var multiPart = await http.MultipartFile.fromPath("photo",photo.path);
+      request.files.add(multiPart);
     }
     var sent = await request.send();
     var response = await http.Response.fromStream(sent);
@@ -182,10 +180,8 @@ class PetsApi {
 
     var blankResp = json.decode("{}") as Map<String, dynamic>;
     if (photo != null) {
-      request.files.add(http.MultipartFile(
-          "photo",
-          File(photo.path).readAsBytes().asStream(),
-          File(photo.path).lengthSync()));
+      var multiPart = await http.MultipartFile.fromPath("photo",photo.path);
+      request.files.add(multiPart);
     }
     var sent = await request.send();
     var response = await http.Response.fromStream(sent);
